@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Resume Builder — Vinay Vamsi</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2a1 1 0 0 1 1 1v10.586l3.293-3.293a1 1 0 0 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0l-5-5a1 1 0 0 1 1.414-1.414L11 13.586V3a1 1 0 0 1 1-1zM4 20a1 1 0 0 1 1-1h14a1 1 0 0 1 0 2H5a1 1 0 0 1-1-1z'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Cambria&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -264,6 +263,12 @@
     font-family: 'Cambria', Georgia, serif;
   }
   .mock-cert-line::before { content: '–'; color: #666; flex-shrink: 0; }
+  .mock-achievement-head {
+    font-size: 11px; font-weight: 700; font-style: italic;
+    letter-spacing: 0.8px; color: #444; text-transform: none;
+    margin-top: 8px; margin-bottom: 3px;
+    font-family: 'Cambria', Georgia, serif;
+  }
 </style>
 </head>
 <body>
@@ -399,8 +404,10 @@ function updatePreview() {
     html += `<div class="mock-section-head">Professional Experience</div>`;
     experience.split('\n').filter(l => l.trim()).forEach(line => {
       const t = line.trim();
-      if (/^[-•*]/.test(t)) {
-        html += `<div class="mock-bullet">${escHtml(t.replace(/^[-•*]\s*/,''))}</div>`;
+      if (/^key achievements[:\s]*/i.test(t)) {
+        html += `<div class="mock-achievement-head">Key Achievements</div>`;
+      } else if (/^[-•*◦]/.test(t)) {
+        html += `<div class="mock-bullet">${escHtml(t.replace(/^[-•*◦]\s*/,''))}</div>`;
       } else if (t.includes('|')) {
         const parts = t.split('|').map(p => p.trim());
         // parts: company | location | role | date  OR  company | role | date
@@ -23604,7 +23611,10 @@ document.getElementById('dl-btn').onclick = async () => {
       if (!raw) return [];
       return raw.split('\n').filter(l=>l.trim()).map(line => {
         const t = line.trim();
-        if (/^[-•*]/.test(t)) return bullet(t.replace(/^[-•*]\s*/,''));
+        if (/^key achievements[:\s]*/i.test(t)) {
+          return new Paragraph({ spacing:{before:100,after:30}, children:[new TextRun({text:"Key Achievements", bold:true, italics:true, font:"Cambria", size:20, color:"444444"})] });
+        }
+        if (/^[-•*◦]/.test(t)) return bullet(t.replace(/^[-•*◦]\s*/,''));
         if (t.includes('|')) {
           const parts = t.split('|').map(p=>p.trim());
           const rows = [];
