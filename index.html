@@ -179,7 +179,7 @@
     transition: all 0.18s;
     display: flex; align-items: center; justify-content: center; gap: 6px;
   }
-  .clear-btn:hover { background: rgba(239,68,68,0.06); border-color: rgba(239,68,68,0.4); color: #dc2626; }
+  .clear-btn:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
 
   /* ── DIVIDER ── */
   .divider {
@@ -382,9 +382,9 @@
   <button class="gen-btn" onclick="updatePreview()">
     ✦ Generate Resume Preview
   </button>
-  <button class="clear-btn" onclick="clearResume()">
-    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
-    Clear
+  <button class="clear-btn" onclick="pasteFromClipboard()">
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 2H7a2 2 0 00-2 2v16a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2h-2"/><path d="M9 12h6M9 16h4"/></svg>
+    Paste from Clipboard
   </button>
 </div>
 
@@ -438,12 +438,15 @@ function parseContent(raw) {
   return { summary: get(summaryRx), skills: get(skillsRx), experience: get(experienceRx) };
 }
 
-function clearResume() {
-  document.getElementById('resume-text').value = '';
-  document.getElementById('chips').innerHTML = '';
-  document.getElementById('resume-mockup').innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>Paste your resume content above to see a live preview here</p></div>';
-  document.getElementById('exp-copy-zone').classList.remove('visible');
-  window._parsedCompanies = [];
+async function pasteFromClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    document.getElementById('resume-text').value = text;
+    detectSections();
+    updatePreview();
+  } catch (err) {
+    alert('Could not read clipboard. Please make sure you grant clipboard permission, or paste manually.');
+  }
 }
 
 function detectSections() {
