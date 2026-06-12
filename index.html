@@ -1424,10 +1424,10 @@ function initProfiles() {
       profiles = JSON.parse(stored);
     } catch(e) {
       console.error("Failed to parse profiles from localStorage, using default.");
-      profiles = { pravallika: DEFAULT_PROFILE_DATA };
+      profiles = { default: DEFAULT_PROFILE_DATA };
     }
   } else {
-    profiles = { pravallika: DEFAULT_PROFILE_DATA };
+    profiles = { default: DEFAULT_PROFILE_DATA };
   }
   
   // Migrate profiles to tagless format
@@ -1436,11 +1436,11 @@ function initProfiles() {
   if (storedId && profiles[storedId]) {
     currentProfileId = storedId;
   } else {
-    currentProfileId = Object.keys(profiles)[0] || 'pravallika';
+    currentProfileId = Object.keys(profiles)[0] || 'default';
   }
   
   if (!profiles[currentProfileId]) {
-    currentProfileId = Object.keys(profiles)[0] || 'pravallika';
+    currentProfileId = Object.keys(profiles)[0] || 'default';
   }
   
   PROFILE = profiles[currentProfileId].profile;
