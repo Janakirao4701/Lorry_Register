@@ -1892,8 +1892,16 @@ function updatePreview() {
   if (PROFILE.phone) contactParts.push(escHtml(PROFILE.phone));
   if (PROFILE.email) contactParts.push(`<a href="mailto:${PROFILE.email}">${escHtml(PROFILE.email)}</a>`);
   if (PROFILE.linkedin) {
-    const displayLinkedin = PROFILE.linkedin.replace(/-[a-zA-Z0-9]*\d+[a-zA-Z0-9]*$/, '');
-    contactParts.push(`<a href="https://${PROFILE.linkedin}" target="_blank">${escHtml(displayLinkedin)}</a>`);
+    let rawUrl = PROFILE.linkedin.trim();
+    let hrefUrl = rawUrl;
+    if (!/^https?:\/\//i.test(hrefUrl)) {
+      hrefUrl = 'https://' + hrefUrl;
+    }
+    let display = rawUrl.replace(/^https?:\/\//i, '');
+    display = display.replace(/^www\./i, '');
+    display = display.replace(/-[a-zA-Z0-9]+(?=\/?$)/, '');
+    display = display.replace(/\/+$/, '');
+    contactParts.push(`<a href="${escHtml(hrefUrl)}" target="_blank">${escHtml(display)}</a>`);
   }
   const contactHtml = contactParts.join(' &nbsp;|&nbsp; ');
 
