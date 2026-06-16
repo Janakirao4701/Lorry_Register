@@ -1,19 +1,20 @@
-    --app-bg: #000000;
-    --app-surface: #0a0a0a;
-    --app-border: #222222;
-    --app-border-hover: #444444;
-    --app-ink: #ffffff;
-    --app-ink-muted: #888888;
-    --app-accent: #0070f3;
-    --app-accent-hover: #0051b3;
-    --app-accent-glow: rgba(0, 112, 243, 0.15);
-    
-    --paper-well-bg: #000000;
-    --border: #cbd5e1;
-    --bg: #f8fafc;
-    --surface: #ffffff;
-    --ink: #000000;
-  }
+:root {
+  --app-bg: #000000;
+  --app-surface: #0a0a0a;
+  --app-border: #222222;
+  --app-border-hover: #444444;
+  --app-ink: #ffffff;
+  --app-ink-muted: #888888;
+  --app-accent: #0070f3;
+  --app-accent-hover: #0051b3;
+  --app-accent-glow: rgba(0, 112, 243, 0.15);
+  
+  --paper-well-bg: #000000;
+  --border: #cbd5e1;
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --ink: #000000;
+}
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
