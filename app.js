@@ -800,54 +800,57 @@ document.getElementById('pdf-btn').onclick = async () => {
   btn.innerHTML = 'Generating...';
   showToast('Generating PDF document...');
 
-  try {
-    const element = document.getElementById('resume-mockup');
-    
-    // Clone the mockup element so we don't mess with the live preview scale or styling
-    const clone = element.cloneNode(true);
-    
-    // Reset transform scale, margin, and position it offscreen for full-DPI capture
-    clone.style.transform = 'none';
-    clone.style.margin = '0';
-    clone.style.position = 'absolute';
-    clone.style.left = '-9999px';
-    clone.style.top = '-9999px';
-    clone.style.width = '8.5in'; // Lock width to standard letter width
-    document.body.appendChild(clone);
-
-    // Strip shadows and margins from individual pages in the clone for clean PDF breaks
-    const pages = clone.querySelectorAll('.preview-page');
-    pages.forEach(p => {
-      p.style.boxShadow = 'none';
-      p.style.margin = '0';
-      p.style.border = 'none';
-      p.style.borderRadius = '0';
-      
-      // Keep internal page content container margins clean
-      const content = p.querySelector('.page-content');
-      if (content) {
-        content.style.marginTop = '0';
-      }
+  const element = document.getElementById('resume-mockup');
+  
+  // Save original styles
+  const originalTransform = element.style.transform;
+  const originalMarginBottom = element.style.marginBottom;
+  
+  // Temporarily reset transform to full scale for capture
+  element.style.transform = 'none';
+  element.style.marginBottom = '0';
+  
+  // Temporarily strip page shadows/margins for clean PDF splits
+  const pages = element.querySelectorAll('.preview-page');
+  const originalPageStyles = [];
+  pages.forEach(p => {
+    originalPageStyles.push({
+      boxShadow: p.style.boxShadow,
+      margin: p.style.margin,
+      border: p.style.border,
+      borderRadius: p.style.borderRadius
     });
+    p.style.boxShadow = 'none';
+    p.style.margin = '0';
+    p.style.border = 'none';
+    p.style.borderRadius = '0';
+  });
 
-    const opt = {
-      margin:       0,
-      filename:     `${currentProfileId}_Resume.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2.5, useCORS: true, logging: false },
-      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
+  const opt = {
+    margin:       0,
+    filename:     `${currentProfileId}_Resume.pdf`,
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2.5, useCORS: true, logging: false },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
 
-    // Trigger download
-    await html2pdf().set(opt).from(clone).save();
-    
-    // Cleanup clone
-    document.body.removeChild(clone);
+  try {
+    // Trigger download directly from the styled preview element
+    await html2pdf().set(opt).from(element).save();
     showToast('PDF Resume downloaded successfully!');
   } catch (err) {
     console.error(err);
     showToast('Error generating PDF: ' + err.message);
   } finally {
+    // Restore original styles immediately
+    element.style.transform = originalTransform;
+    element.style.marginBottom = originalMarginBottom;
+    pages.forEach((p, i) => {
+      p.style.boxShadow = originalPageStyles[i].boxShadow;
+      p.style.margin = originalPageStyles[i].margin;
+      p.style.border = originalPageStyles[i].border;
+      p.style.borderRadius = originalPageStyles[i].borderRadius;
+    });
     btn.disabled = false;
     btn.innerHTML = originalHtml;
   }
