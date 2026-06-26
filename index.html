@@ -299,8 +299,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   #searchInput{width:100% !important;padding:7px 28px 7px 31px}
   #searchInput:focus{width:100% !important}
   
-  .toolbar-right{display:flex;flex-direction:row;width:100%;gap:8px;justify-content:space-between}
-  .toolbar-right .btn, .toolbar-right label.btn{flex:1;justify-content:center;margin:0;padding:7px 8px;font-size:0.72rem}
+  .toolbar-right{display:flex;flex-direction:row;width:100%;gap:8px;flex-wrap:wrap;justify-content:space-between}
+  .toolbar-right .btn, .toolbar-right label.btn{flex:1 1 calc(50% - 4px);justify-content:center;margin:0;padding:7px 8px;font-size:0.72rem}
   
   /* Vehicle Card styling */
   .vehicle-head{flex-direction:column;align-items:stretch;gap:8px;padding:12px 14px}
@@ -383,6 +383,10 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     </button>
   </div>
   <div class="toolbar-right">
+    <button class="btn btn-outline btn-sm" onclick="generateShareLink()" title="Generate shareable link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+      Share Link
+    </button>
     <button class="btn btn-outline btn-sm" onclick="exportCSV()" title="Download CSV backup">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Export CSV
@@ -415,6 +419,10 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   <div class="gt-divider"></div>
   <div class="gt-item"><div class="gt-label">Total Amount</div><div class="gt-value" id="grandTonnageAmt">₹ 0.00</div></div>
   <div class="gt-actions">
+    <button class="btn btn-white btn-sm" onclick="generateShareLink()" title="Generate shareable link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+      Share
+    </button>
     <button class="btn btn-white btn-sm" onclick="exportCSV()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Export
@@ -499,6 +507,114 @@ function getRowData(vid) {
     });
   });
   return rows;
+}
+
+// ── SHAREABLE LINK STATE ENCODING ──
+function generateShareLink() {
+  const activeData = {
+    version: 3,
+    globalDate: document.getElementById('globalDate').value,
+    vehicles: vehicles.map(v => {
+      const vno = (document.querySelector('#card-' + v.id + ' .vno-input')?.value || v.vno || '').trim().toUpperCase();
+      const rows = [];
+      document.querySelectorAll('#body-' + v.id + ' tr.data-row').forEach(tr => {
+        const date = tr.querySelector('input[type="date"]')?.value || '';
+        const invoice = (tr.querySelector('.cell-input.mono')?.value || '').trim();
+        const tonnage = tr.querySelector('.cell-input.tonnage')?.value || '';
+        if (date || invoice || tonnage) {
+          rows.push([date, invoice, tonnage]);
+        }
+      });
+      return [vno, rows];
+    }).filter(v => v[0] || v[1].length > 0)
+  };
+
+  try {
+    const rawStr = JSON.stringify(activeData);
+    const base64 = btoa(encodeURIComponent(rawStr).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+      return String.fromCharCode('0x' + p1);
+    }));
+    const shareUrl = window.location.origin + window.location.pathname + '#share=' + base64;
+    
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      toast('Shareable link copied to clipboard!', 'success');
+    }).catch(() => {
+      const inp = document.createElement('input');
+      inp.value = shareUrl;
+      document.body.appendChild(inp);
+      inp.select();
+      document.execCommand('copy');
+      inp.remove();
+      toast('Shareable link copied to clipboard!', 'success');
+    });
+  } catch(e) {
+    console.error('Error generating share link:', e);
+    toast('Failed to generate share link', 'danger');
+  }
+}
+
+function decodeShareData(base64) {
+  try {
+    const rawStr = decodeURIComponent(Array.prototype.map.call(atob(base64), c => {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(rawStr);
+  } catch(e) {
+    console.error('Decoding failed:', e);
+    return null;
+  }
+}
+
+function checkShareLink() {
+  const hash = window.location.hash;
+  if (!hash.startsWith('#share=')) return;
+  const base64 = hash.substring(7);
+  const data = decodeShareData(base64);
+  if (!data || !Array.isArray(data.vehicles)) {
+    toast('Invalid or corrupted share link', 'danger');
+    history.replaceState(null, null, ' ');
+    return;
+  }
+  history.replaceState(null, null, ' ');
+  showModal({
+    icon: '📥', iconType: 'info',
+    title: 'Import Shared Data?',
+    msg: 'Do you want to load the shared register data from this link? This will **replace your current browser cache**.',
+    confirmLabel: 'Import & Load', confirmClass: 'btn-modal-confirm-blue',
+    onConfirm: () => {
+      try {
+        vehicles = [];
+        nextId = 0;
+        if (data.globalDate) {
+          document.getElementById('globalDate').value = data.globalDate;
+          document.getElementById('printDate').textContent = fmtDate(data.globalDate);
+        }
+        data.vehicles.forEach(pair => {
+          const vno = pair[0] || '';
+          const rawRows = pair[1] || [];
+          const rows = [];
+          for (let i = 0; i < Math.max(DEFAULT_ROWS, rawRows.length); i++) {
+            const rr = rawRows[i];
+            if (rr) {
+              rows.push({ date: rr[0] || '', invoice: rr[1] || '', tonnage: rr[2] || '' });
+            } else {
+              rows.push({});
+            }
+          }
+          vehicles.push({ id: nextId++, vno, rows });
+        });
+        const grid = document.getElementById('vehiclesGrid');
+        grid.innerHTML = '';
+        vehicles.forEach(v => grid.appendChild(buildCard(v)));
+        vehicles.forEach(v => recalc(v.id));
+        updateGrand();
+        save();
+        toast('Shared data loaded successfully!', 'success');
+      } catch(err) {
+        toast('Failed to load shared data: ' + err.message, 'danger');
+      }
+    }
+  });
 }
 
 // ── SAVE STATUS ──
@@ -1164,6 +1280,7 @@ function init() {
     initDefault();
   }
   updateGrand();
+  checkShareLink();
 }
 
 init();
