@@ -509,29 +509,77 @@ function getRowData(vid) {
   return rows;
 }
 
-// ── SHAREABLE LINK STATE ENCODING ──
-function generateShareLink() {
-  const activeData = {
-    version: 3,
-    globalDate: document.getElementById('globalDate').value,
-    vehicles: vehicles.map(v => {
-      const vno = (document.querySelector('#card-' + v.id + ' .vno-input')?.value || v.vno || '').trim().toUpperCase();
-      const rows = [];
-      document.querySelectorAll('#body-' + v.id + ' tr.data-row').forEach(tr => {
-        const date = tr.querySelector('input[type="date"]')?.value || '';
-        const invoice = (tr.querySelector('.cell-input.mono')?.value || '').trim();
-        const tonnage = tr.querySelector('.cell-input.tonnage')?.value || '';
-        if (date || invoice || tonnage) {
-          rows.push([date, invoice, tonnage]);
-        }
-      });
-      return [vno, rows];
-    }).filter(v => v[0] || v[1].length > 0)
-  };
+// ── SHAREABLE LINK STATE COMPRESSION & ENCODING ──
+function packData() {
+  const version = '3';
+  const globalDate = document.getElementById('globalDate').value;
+  const parts = [version, globalDate];
+  
+  vehicles.forEach(v => {
+    const vno = (document.querySelector('#card-' + v.id + ' .vno-input')?.value || v.vno || '').trim().toUpperCase();
+    const rows = [];
+    document.querySelectorAll('#body-' + v.id + ' tr.data-row').forEach(tr => {
+      const date = tr.querySelector('input[type="date"]')?.value || '';
+      const invoice = (tr.querySelector('.cell-input.mono')?.value || '').trim();
+      const tonnage = tr.querySelector('.cell-input.tonnage')?.value || '';
+      if (date || invoice || tonnage) {
+        rows.push([
+          encodeURIComponent(date),
+          encodeURIComponent(invoice),
+          encodeURIComponent(tonnage)
+        ].join(','));
+      }
+    });
+    if (vno || rows.length > 0) {
+      parts.push(encodeURIComponent(vno) + ';' + rows.join(';'));
+    }
+  });
+  return parts.join('|');
+}
 
+function unpackData(str) {
   try {
-    const rawStr = JSON.stringify(activeData);
-    const base64 = btoa(encodeURIComponent(rawStr).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+    const parts = str.split('|');
+    const version = parts[0];
+    const globalDate = parts[1] || '';
+    const vehiclesData = [];
+    
+    for (let i = 2; i < parts.length; i++) {
+      const vPart = parts[i];
+      const semiIndex = vPart.indexOf(';');
+      let vno = '';
+      let rowParts = [];
+      if (semiIndex !== -1) {
+        vno = decodeURIComponent(vPart.substring(0, semiIndex));
+        const rowsStr = vPart.substring(semiIndex + 1);
+        if (rowsStr) {
+          rowParts = rowsStr.split(';');
+        }
+      } else {
+        vno = decodeURIComponent(vPart);
+      }
+      
+      const rows = rowParts.map(rStr => {
+        const rParts = rStr.split(',');
+        return {
+          date: decodeURIComponent(rParts[0] || ''),
+          invoice: decodeURIComponent(rParts[1] || ''),
+          tonnage: decodeURIComponent(rParts[2] || '')
+        };
+      });
+      vehiclesData.push({ vno, rows });
+    }
+    return { globalDate, vehicles: vehiclesData };
+  } catch(e) {
+    console.error('Unpacking failed:', e);
+    return null;
+  }
+}
+
+function generateShareLink() {
+  try {
+    const packed = packData();
+    const base64 = btoa(encodeURIComponent(packed).replace(/%([0-9A-F]{2})/g, (match, p1) => {
       return String.fromCharCode('0x' + p1);
     }));
     const shareUrl = window.location.origin + window.location.pathname + '#share=' + base64;
@@ -553,28 +601,29 @@ function generateShareLink() {
   }
 }
 
-function decodeShareData(base64) {
-  try {
-    const rawStr = decodeURIComponent(Array.prototype.map.call(atob(base64), c => {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-    return JSON.parse(rawStr);
-  } catch(e) {
-    console.error('Decoding failed:', e);
-    return null;
-  }
-}
-
 function checkShareLink() {
   const hash = window.location.hash;
   if (!hash.startsWith('#share=')) return;
   const base64 = hash.substring(7);
-  const data = decodeShareData(base64);
+  let packed = '';
+  try {
+    packed = decodeURIComponent(Array.prototype.map.call(atob(base64), c => {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+  } catch(e) {
+    console.error('Decoding Base64 failed:', e);
+    toast('Invalid or corrupted share link', 'danger');
+    history.replaceState(null, null, ' ');
+    return;
+  }
+  
+  const data = unpackData(packed);
   if (!data || !Array.isArray(data.vehicles)) {
     toast('Invalid or corrupted share link', 'danger');
     history.replaceState(null, null, ' ');
     return;
   }
+  
   history.replaceState(null, null, ' ');
   showModal({
     icon: '📥', iconType: 'info',
@@ -589,14 +638,14 @@ function checkShareLink() {
           document.getElementById('globalDate').value = data.globalDate;
           document.getElementById('printDate').textContent = fmtDate(data.globalDate);
         }
-        data.vehicles.forEach(pair => {
-          const vno = pair[0] || '';
-          const rawRows = pair[1] || [];
+        data.vehicles.forEach(vData => {
+          const vno = vData.vno || '';
+          const rawRows = vData.rows || [];
           const rows = [];
           for (let i = 0; i < Math.max(DEFAULT_ROWS, rawRows.length); i++) {
             const rr = rawRows[i];
             if (rr) {
-              rows.push({ date: rr[0] || '', invoice: rr[1] || '', tonnage: rr[2] || '' });
+              rows.push({ date: rr.date || '', invoice: rr.invoice || '', tonnage: rr.tonnage || '' });
             } else {
               rows.push({});
             }
