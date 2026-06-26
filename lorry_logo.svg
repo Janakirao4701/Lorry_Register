@@ -1,17 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="512" height="512">
   <rect width="32" height="32" rx="8" fill="#1A3C6E"/>
-  <!-- Lorry body -->
-  <path d="M6 10h13v10H6z" fill="#FFFFFF"/>
-  <path d="M19 12h4l3 3v5h-7z" fill="#FFFFFF"/>
-  <!-- Cabin Window -->
-  <path d="M20 13h2.5l1.5 1.5V16h-4z" fill="#1A3C6E"/>
-  <!-- Wheels -->
-  <circle cx="10" cy="22" r="2.5" fill="#FFFFFF"/>
-  <circle cx="10" cy="22" r="1" fill="#1A3C6E"/>
-  <circle cx="21" cy="22" r="2.5" fill="#FFFFFF"/>
-  <circle cx="21" cy="22" r="1" fill="#1A3C6E"/>
-  <!-- Cargo Slots Details -->
-  <rect x="8" y="12" width="2" height="6" fill="#1A3C6E" rx="0.5"/>
-  <rect x="12" y="12" width="2" height="6" fill="#1A3C6E" rx="0.5"/>
-  <rect x="16" y="12" width="2" height="6" fill="#1A3C6E" rx="0.5"/>
+  <!-- Lorry Cargo Bed (Silver/Light Grey) -->
+  <rect x="5" y="10" width="13" height="10" rx="1" fill="#E2E8F0"/>
+  <!-- Vertical cargo details (Dark Blue slots) -->
+  <rect x="8" y="11" width="1.5" height="8" fill="#1A3C6E" rx="0.5"/>
+  <rect x="11" y="11" width="1.5" height="8" fill="#1A3C6E" rx="0.5"/>
+  <rect x="14" y="11" width="1.5" height="8" fill="#1A3C6E" rx="0.5"/>
+  
+  <!-- Connector joint -->
+  <rect x="17.5" y="17" width="2" height="2" fill="#94A3B8"/>
+  
+  <!-- Lorry Cabin (Green tractor) -->
+  <path d="M19 12h4.5l2.5 3v5h-7z" fill="#22C55E"/>
+  <!-- Cabin Window (Dark Blue) -->
+  <path d="M20.5 13h2l1.5 2h-3.5z" fill="#1A3C6E"/>
+  <!-- Bumper/Grill (Silver) -->
+  <rect x="25" y="18" width="1.5" height="2" fill="#94A3B8" rx="0.5"/>
+  
+  <!-- Wheels (Dark Grey with silver hubs) -->
+  <circle cx="10" cy="22" r="3" fill="#1E293B"/>
+  <circle cx="10" cy="22" r="1.2" fill="#E2E8F0"/>
+  
+  <circle cx="21.5" cy="22" r="3" fill="#1E293B"/>
+  <circle cx="21.5" cy="22" r="1.2" fill="#E2E8F0"/>
 </svg>
