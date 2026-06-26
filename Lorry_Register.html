@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lorry Trips Register — Adding Value Transport</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#EDF1F7;
+  --surface:#fff;
+  --primary:#1A3C6E;
+  --primary-light:#2E74B5;
+  --primary-xlight:#EFF6FF;
+  --accent:#E07B2A;
+  --green:#15803D;
+  --green-bg:#DCFCE7;
+  --green-border:#86EFAC;
+  --row-alt:#F8FAFC;
+  --border:#E2E8F0;
+  --text:#0F172A;
+  --muted:#64748B;
+  --input-focus:#DBEAFE;
+  --danger:#DC2626;
+  --danger-bg:#FEE2E2;
+  --danger-border:#FECACA;
+  --warn:#D97706;
+  --warn-bg:#FEF3C7;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+  --shadow-md:0 4px 10px rgba(0,0,0,.09),0 2px 4px rgba(0,0,0,.05);
+  --radius:12px;
+}
+
+body.dark {
+  --bg:#0F172A;
+  --surface:#1E293B;
+  --primary:#38BDF8;
+  --primary-light:#38BDF8;
+  --primary-xlight:rgba(56, 189, 248, 0.12);
+  --accent:#F59E0B;
+  --green:#4ADE80;
+  --green-bg:rgba(74, 222, 128, 0.1);
+  --green-border:rgba(74, 222, 128, 0.2);
+  --row-alt:#1E293B;
+  --border:#334155;
+  --text:#F1F5F9;
+  --muted:#94A3B8;
+  --input-focus:#1E293B;
+  --danger:#F87171;
+  --danger-bg:rgba(248, 113, 113, 0.1);
+  --danger-border:rgba(248, 113, 113, 0.2);
+  --warn:#FBBF24;
+  --warn-bg:rgba(251, 191, 36, 0.1);
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 1px 2px rgba(0,0,0,.2);
+  --shadow-md:0 10px 15px -3px rgba(0,0,0,0.4),0 4px 6px -2px rgba(0,0,0,0.3);
+}
+
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:18px 16px 80px;transition:background 0.3s, color 0.3s}
+
+#toast{position:fixed;top:18px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:300px}
+.toast-item{background:#1E293B;color:#fff;padding:11px 16px 11px 14px;border-radius:9px;font-size:.8rem;font-weight:500;
+  box-shadow:var(--shadow-md);opacity:0;transform:translateX(24px);transition:all .28s ease;pointer-events:none;
+  display:flex;align-items:center;gap:10px}
+.toast-item.show{opacity:1;transform:translateX(0)}
+.toast-item.success{border-left:3px solid #22C55E}
+.toast-item.info{border-left:3px solid #3B82F6}
+.toast-item.warn{border-left:3px solid var(--warn)}
+.toast-item.danger{border-left:3px solid var(--danger)}
+
+#modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:10000;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(6px)}
+#modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:16px;padding:30px 28px 24px;max-width:400px;width:100%;
+  box-shadow:0 24px 64px rgba(0,0,0,.35);transform:scale(.94) translateY(8px);
+  transition:all .22s cubic-bezier(.34,1.56,.64,1)}
+#modal-overlay.open .modal-box{transform:scale(1) translateY(0)}
+.modal-icon{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:1.55rem;margin:0 auto 14px}
+.modal-icon.danger{background:#FEE2E2}
+.modal-icon.warning{background:#FEF3C7}
+.modal-icon.info{background:#DBEAFE}
+.modal-title{font-size:1.05rem;font-weight:700;color:var(--text);text-align:center;margin-bottom:8px}
+.modal-msg{font-size:.83rem;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:24px}
+.modal-msg strong{color:var(--text);font-weight:600}
+.modal-actions{display:flex;gap:10px;justify-content:center}
+.modal-actions .btn{min-width:110px;justify-content:center;padding:9px 20px;font-size:.83rem}
+.btn-modal-cancel{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+.btn-modal-cancel:hover{background:var(--border);color:var(--text)}
+.btn-modal-confirm-danger{background:var(--danger);color:#fff}
+.btn-modal-confirm-danger:hover{filter:brightness(0.9)}
+.btn-modal-confirm-warn{background:var(--warn);color:#fff}
+.btn-modal-confirm-warn:hover{filter:brightness(0.9)}
+.btn-modal-confirm-blue{background:var(--primary-light);color:#fff}
+.btn-modal-confirm-blue:hover{filter:brightness(0.9)}
+@media print{#modal-overlay,#toast,#save-status{display:none!important}}
+
+#save-status{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+  background:#1E293B;color:#fff;padding:7px 16px;border-radius:20px;font-size:.73rem;font-weight:600;
+  z-index:8000;opacity:0;transition:opacity .3s;pointer-events:none;display:flex;align-items:center;gap:7px;
+  box-shadow:var(--shadow-md)}
+#save-status.visible{opacity:1}
+.ss-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+#save-status.saving .ss-dot{background:#F59E0B;animation:blink .7s infinite}
+#save-status.saved .ss-dot{background:#22C55E}
+#save-status.error .ss-dot{background:var(--danger)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}60%{box-shadow:0 0 0 5px rgba(34,197,94,0)}}
+
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:none;
+  font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;
+  transition:all 0.2s cubic-bezier(0.4, 0, 0.2, 1);white-space:nowrap;outline:none}
+.btn:focus-visible{box-shadow:0 0 0 3px rgba(46,116,181,.4)}
+.btn svg{width:14px;height:14px;flex-shrink:0}
+.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.btn:active{transform:translateY(0)}
+
+.btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.btn-ghost:hover{background:rgba(255,255,255,.22)}
+.btn-white{background:var(--surface);color:var(--primary-light);border:1px solid var(--border)}
+.btn-white:hover{background:var(--primary-xlight)}
+.btn-danger{background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger-border)}
+.btn-danger:hover{background:var(--danger-border)}
+.btn-primary{background:var(--primary-light);color:#fff}
+.btn-primary:hover{background:var(--primary-light);filter:brightness(0.9)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:var(--green);filter:brightness(0.9)}
+.btn-outline{background:transparent;color:var(--primary-light);border:1.5px solid var(--primary-light)}
+.btn-outline:hover{background:var(--primary-xlight)}
+.btn-sm{padding:6px 11px;font-size:.73rem}
+
+.page-header{
+  background:linear-gradient(135deg,#1A3C6E 0%,#1e4d8c 55%,#1e5499 100%);
+  color:#fff;border-radius:var(--radius);padding:18px 22px;margin-bottom:18px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  box-shadow:0 4px 18px rgba(26,60,110,.38)}
+.header-left h1{font-size:1.12rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:9px}
+.header-left .sub{font-size:.71rem;color:#93C5FD;margin-top:4px;letter-spacing:.02em}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#22C55E;display:inline-block;flex-shrink:0;animation:pulse 2.4s infinite}
+.header-right{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.date-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:7px 12px}
+.date-pill label{font-size:.66rem;color:#93C5FD;white-space:nowrap;font-weight:700;text-transform:uppercase;letter-spacing:.06em;cursor:pointer}
+.date-pill input{background:transparent;border:none;color:#fff;font-family:'JetBrains Mono',monospace;
+  font-size:.85rem;font-weight:600;outline:none;width:122px;cursor:pointer}
+.date-pill input::-webkit-calendar-picker-indicator{filter:invert(1);cursor:pointer;opacity:.7}
+
+.stats-bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.stat-card{background:var(--surface);border-radius:10px;padding:12px 16px;flex:1;min-width:120px;
+  border:1px solid var(--border);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:3px;
+  transition:all 0.25s cubic-bezier(0.4, 0, 0.2, 1)}
+.stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.stat-card .s-label{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.stat-card .s-value{font-family:'JetBrains Mono',monospace;font-size:1.28rem;font-weight:700;color:var(--primary-light)}
+.stat-card .s-sub{font-size:.63rem;color:var(--muted);margin-top:1px}
+.stat-card.accent .s-value{color:var(--accent)}
+.stat-card.green .s-value{color:var(--green)}
+
+.toolbar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.toolbar-left{display:flex;gap:8px;flex-wrap:wrap;flex:1;align-items:center}
+.toolbar-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+.search-wrap{position:relative;display:flex;align-items:center}
+.search-wrap .s-icon{position:absolute;left:9px;color:var(--muted);pointer-events:none;flex-shrink:0}
+#searchInput{border:1.5px solid var(--border);border-radius:8px;padding:7px 28px 7px 31px;
+  font-family:'Inter',sans-serif;font-size:.8rem;background:var(--surface);color:var(--text);outline:none;
+  width:200px;transition:all .15s}
+#searchInput:focus{border-color:var(--primary-light);background:var(--input-focus);width:240px;box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);}
+#searchInput::placeholder{color:#CBD5E1}
+.search-clear{position:absolute;right:8px;cursor:pointer;color:var(--muted);font-size:.85rem;
+  background:none;border:none;padding:3px;line-height:1;display:none;border-radius:3px}
+.search-clear:hover{color:var(--danger);background:var(--danger-bg)}
+.search-clear.visible{display:block}
+
+.vehicle-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);
+  box-shadow:var(--shadow);overflow:hidden;margin-bottom:14px;
+  transition:all 0.25s cubic-bezier(0.4, 0, 0.2, 1)}
+.vehicle-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.vehicle-card.search-hidden{display:none}
+
+.vehicle-head{background:linear-gradient(90deg,#1A3C6E,#1e5298);
+  padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.vno-wrap{display:flex;align-items:center;gap:8px}
+.vno-label{font-size:.6rem;color:#93C5FD;font-weight:700;text-transform:uppercase;letter-spacing:.09em;white-space:nowrap}
+.vno-input{font-family:'JetBrains Mono',monospace;font-size:.95rem;font-weight:700;
+  color:#fff;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);
+  border-radius:6px;padding:5px 10px;outline:none;width:165px;text-transform:uppercase;transition:all .15s}
+.vno-input:focus{border-color:#60A5FA;background:rgba(255,255,255,.18)}
+.vno-input::placeholder{color:rgba(255,255,255,.3);font-weight:400}
+.vno-input.invalid{border-color:#FCA5A5!important;background:rgba(220,38,38,.18)!important}
+.head-right{display:flex;align-items:center;gap:8px}
+.trip-badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  border-radius:20px;padding:4px 12px;font-size:.7rem;color:#E0F2FE;font-weight:600;white-space:nowrap}
+.btn-del-vehicle{background:rgba(220,38,38,.18);border:1px solid rgba(220,38,38,.28);
+  color:#FCA5A5;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:.7rem;
+  font-family:'Inter',sans-serif;font-weight:600;transition:all .15s;display:flex;align-items:center;gap:5px}
+.btn-del-vehicle:hover{background:rgba(220,38,38,.4);color:#fff}
+
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:460px}
+thead th{background:var(--primary-xlight);color:var(--primary-light);font-size:.66rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.07em;padding:9px 10px;text-align:center;
+  border-bottom:2px solid var(--border);border-right:1px solid var(--border);white-space:nowrap}
+thead th:last-child{border-right:none}
+thead th.th-act{width:38px}
+
+tbody tr{transition:background .08s}
+tbody tr:nth-child(even){background:var(--row-alt)}
+tbody tr:hover{background:var(--primary-xlight)}
+tbody tr.search-match{background:var(--warn-bg)!important}
+tbody td{padding:3px 5px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:middle}
+tbody td:last-child{border-right:none}
+td.sno{text-align:center;font-family:'JetBrains Mono',monospace;font-size:.72rem;
+  font-weight:600;color:var(--muted);width:38px;padding:0;user-select:none}
+td.act-cell{width:36px;text-align:center;padding:2px}
+
+.btn-del-row{background:none;border:none;cursor:pointer;color:#CBD5E1;padding:4px;border-radius:4px;
+  font-size:.88rem;line-height:1;transition:all .15s;display:flex;align-items:center;justify-content:center;width:26px;height:26px}
+.btn-del-row:hover{color:var(--danger);background:var(--danger-bg)}
+
+.cell-input{width:100%;border:1.5px solid transparent;border-radius:5px;padding:5px 7px;
+  font-family:'Inter',sans-serif;font-size:.8rem;background:transparent;color:var(--text);
+  outline:none;transition:border-color .15s,background .15s}
+.cell-input:focus{border-color:var(--primary-light);background:var(--input-focus);box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);}
+.cell-input.mono{font-family:'JetBrains Mono',monospace;font-size:.77rem;letter-spacing:.02em}
+.cell-input.tonnage{text-align:right;font-weight:600;font-family:'JetBrains Mono',monospace}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{opacity:.35}
+
+.date-cell-wrap{position:relative;width:100%}
+.date-cell-wrap input[type=date]{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2}
+.date-display{font-size:.8rem;font-family:'Inter',sans-serif;color:var(--text);padding:5px 7px;
+  min-height:30px;display:flex;align-items:center;border:1.5px solid transparent;border-radius:5px;
+  transition:all .15s;cursor:pointer;user-select:none;white-space:nowrap;pointer-events:none}
+.date-display.empty{color:var(--muted);font-style:italic;font-size:.72rem}
+.date-cell-wrap:hover .date-display,.date-cell-wrap input[type=date]:focus~.date-display
+  {border-color:var(--primary-light);background:var(--input-focus);box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);}
+
+.total-row td{background:var(--green-bg)!important;border-top:2px solid var(--green-border);padding:8px 12px}
+.total-label{text-align:right;font-size:.74rem;font-weight:700;color:var(--green);white-space:nowrap}
+.total-value{text-align:center;font-family:'JetBrains Mono',monospace;font-size:.86rem;font-weight:700;color:var(--green)}
+
+.add-row-row td{padding:5px 8px;background:var(--surface);border-top:1px dashed var(--border)}
+.btn-add-row{background:none;border:1.5px dashed var(--border);border-radius:6px;padding:5px 14px;
+  font-size:.74rem;font-family:'Inter',sans-serif;font-weight:600;color:var(--muted);cursor:pointer;
+  transition:all .15s;display:flex;align-items:center;gap:5px;width:100%}
+.btn-add-row:hover{border-color:var(--primary-light);color:var(--primary-light);background:var(--primary-xlight)}
+
+.add-vehicle-card{border:2px dashed var(--border);border-radius:var(--radius);padding:18px;text-align:center;
+  cursor:pointer;transition:all .2s;background:var(--surface);margin-bottom:14px;display:flex;
+  align-items:center;justify-content:center;gap:10px;color:var(--muted);font-size:.84rem;font-weight:600}
+.add-vehicle-card:hover{border-color:var(--primary-light);color:var(--primary-light);background:var(--primary-xlight)}
+
+.grand-bar{background:linear-gradient(135deg,#1A3C6E,#1e5298);border-radius:var(--radius);
+  padding:16px 22px;display:flex;align-items:center;flex-wrap:wrap;gap:14px;
+  margin-top:4px;box-shadow:0 4px 18px rgba(26,60,110,.32)}
+.grand-bar .gt-item{display:flex;flex-direction:column;gap:2px}
+.grand-bar .gt-label{font-size:.63rem;color:#93C5FD;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.grand-bar .gt-value{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;color:#fff}
+.grand-bar .gt-divider{width:1px;height:36px;background:rgba(255,255,255,.15);flex-shrink:0}
+.grand-bar .gt-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+
+@media print{
+  body{background:#fff;padding:8px}
+  .page-header,.vehicle-head,thead th,.total-row td,.grand-bar{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .toolbar,.add-row-row,.add-vehicle-card,.btn-del-row,.btn-del-vehicle,
+  .stats-bar,.live-dot,.disclaimer-text,.theme-toggle{display:none!important}
+  .cell-input{border:none;padding:3px}
+  .vehicle-card{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid;margin-bottom:10px}
+  .date-cell-wrap input[type=date]{display:none!important}
+  .date-display{border:none;padding:3px 7px}
+  input[type=number]::-webkit-inner-spin-button{display:none}
+  .grand-bar .gt-actions{display:none}
+  table{min-width:unset}
+  .print-only{display:block!important}
+}
+.print-only{display:none;text-align:center;margin-bottom:8px;font-size:.78rem;color:#555;
+  border-bottom:1px solid #ddd;padding-bottom:5px}
+
+@media(max-width:640px){
+  /* Header mobile styling */
+  .page-header{flex-direction:column;align-items:stretch;gap:12px}
+  .header-right{width:100%;margin-top:4px;display:flex;flex-direction:row;align-items:center;gap:8px}
+  .date-pill{flex:1;justify-content:space-between}
+  .date-pill input{width:105px}
+  .theme-toggle{padding:8px;display:flex;align-items:center;justify-content:center}
+  
+  /* Stats Cards 2x2 Grid on Mobile */
+  .stats-bar{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+  .stat-card{width:100%;min-width:unset;padding:10px 12px}
+  
+  /* Toolbar styling */
+  .toolbar{flex-direction:column;gap:8px;align-items:stretch}
+  .toolbar-left{flex-direction:row;width:100%;gap:8px}
+  .toolbar-left .btn-primary{flex:1;justify-content:center}
+  .toolbar-left .search-wrap{flex:1.5;width:100%}
+  #searchInput{width:100% !important;padding:7px 28px 7px 31px}
+  #searchInput:focus{width:100% !important}
+  
+  .toolbar-right{display:flex;flex-direction:row;width:100%;gap:8px;justify-content:space-between}
+  .toolbar-right .btn, .toolbar-right label.btn{flex:1;justify-content:center;margin:0;padding:7px 8px;font-size:0.72rem}
+  
+  /* Vehicle Card styling */
+  .vehicle-head{flex-direction:column;align-items:stretch;gap:8px;padding:12px 14px}
+  .vno-wrap{justify-content:space-between;width:100%}
+  .vno-input{flex:1;max-width:unset;width:auto}
+  .head-right{justify-content:space-between;width:100%}
+  .btn-del-vehicle{padding:5px 12px;font-size:0.75rem}
+  
+  /* Table wrap setting */
+  table{min-width:560px}
+}
+@media(max-width:400px){
+  body{padding:12px 10px 70px}
+  .grand-bar{flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 14px;gap:8px}
+  .grand-bar .gt-divider{display:none}
+  .grand-bar .gt-item{flex:1;min-width:65px}
+  .grand-bar .gt-label{font-size:0.58rem}
+  .grand-bar .gt-value{font-size:0.92rem}
+  .grand-bar .gt-actions{width:100%;margin-top:4px;justify-content:flex-end;gap:6px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+<div id="save-status"><span class="ss-dot"></span><span id="ss-text">Saving…</span></div>
+
+<div id="modal-overlay" onclick="modalOutsideClick(event)" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+  <div class="modal-box">
+    <div class="modal-icon" id="modal-icon">⚠️</div>
+    <div class="modal-title" id="modal-title">Are you sure?</div>
+    <div class="modal-msg" id="modal-msg">This action cannot be undone.</div>
+    <div class="modal-actions">
+      <button class="btn btn-modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn" id="modal-confirm-btn" onclick="modalConfirm()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="page-header">
+  <div class="header-left">
+    <h1>🚛 Lorry Trips Register <span class="live-dot" title="Auto-saved to this browser"></span></h1>
+    <div class="sub">Adding Value Transport &nbsp;·&nbsp; Daily Entry Sheet &nbsp;·&nbsp; Auto-saved offline</div>
+  </div>
+  <div class="header-right">
+    <div class="date-pill" title="Sheet date — auto-fills new rows" onclick="try{document.getElementById('globalDate').showPicker()}catch(e){}">
+      <label for="globalDate" onclick="event.stopPropagation()">Sheet Date</label>
+      <input type="date" id="globalDate" onchange="applyGlobalDate()" onclick="event.stopPropagation(); try{this.showPicker()}catch(e){}" />
+    </div>
+    <button class="btn btn-ghost theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none; width:14px; height:14px;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px; height:14px;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="btn btn-ghost" onclick="confirmPrint()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Print
+    </button>
+  </div>
+</div>
+
+<div class="print-only" id="printHeader">Adding Value Transport — Lorry Trips Register &nbsp;|&nbsp; <span id="printDate"></span></div>
+
+<div class="stats-bar">
+  <div class="stat-card"><div class="s-label">Vehicles</div><div class="s-value" id="statVehicles">0</div><div class="s-sub">active tables</div></div>
+  <div class="stat-card accent"><div class="s-label">Total Trips</div><div class="s-value" id="statTrips">0</div><div class="s-sub">with tonnage</div></div>
+  <div class="stat-card green"><div class="s-label">Total Tonnage</div><div class="s-value" id="statTon">0.000 T</div><div class="s-sub">all vehicles</div></div>
+  <div class="stat-card green"><div class="s-label">Total Amount</div><div class="s-value" id="statAmt">₹ 0.00</div><div class="s-sub">@ ₹130 / Ton</div></div>
+</div>
+
+<div class="toolbar">
+  <div class="toolbar-left">
+    <div class="search-wrap">
+      <svg class="s-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Search vehicle / invoice…" oninput="liveSearch(this.value)" autocomplete="off" spellcheck="false" title="Search (Alt+F)" />
+      <button class="search-clear" id="searchClear" onclick="clearSearch()" title="Clear">✕</button>
+    </div>
+    <button class="btn btn-primary" onclick="addVehicle()" title="Add vehicle table (Alt+N)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Vehicle
+    </button>
+  </div>
+  <div class="toolbar-right">
+    <button class="btn btn-outline btn-sm" onclick="exportCSV()" title="Download CSV backup">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export CSV
+    </button>
+    <label class="btn btn-outline btn-sm" title="Restore from CSV backup" style="cursor:pointer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 14 12 9 17 14"/><line x1="12" y1="9" x2="12" y2="21"/></svg>
+      Import CSV
+      <input type="file" id="importFile" accept=".csv" onchange="importCSV(event)" style="display:none">
+    </label>
+    <button class="btn btn-danger btn-sm" onclick="resetAll()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
+      Reset
+    </button>
+  </div>
+</div>
+
+<div id="vehiclesGrid"></div>
+
+<div class="add-vehicle-card" onclick="addVehicle()" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')addVehicle()">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  Add New Vehicle Table
+</div>
+
+<div class="grand-bar">
+  <div class="gt-item"><div class="gt-label">Vehicles</div><div class="gt-value" id="grandVehicles">0</div></div>
+  <div class="gt-divider"></div>
+  <div class="gt-item"><div class="gt-label">Total Trips</div><div class="gt-value" id="grandTrips">0</div></div>
+  <div class="gt-divider"></div>
+  <div class="gt-item"><div class="gt-label">Total Tonnage</div><div class="gt-value" id="grandTonnage">0.000 T</div></div>
+  <div class="gt-divider"></div>
+  <div class="gt-item"><div class="gt-label">Total Amount</div><div class="gt-value" id="grandTonnageAmt">₹ 0.00</div></div>
+  <div class="gt-actions">
+    <button class="btn btn-white btn-sm" onclick="exportCSV()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export
+    </button>
+    <button class="btn btn-white btn-sm" onclick="confirmPrint()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Print
+    </button>
+  </div>
+</div>
+
+<div class="disclaimer-text" style="text-align: center; margin-top: 24px; font-size: 0.72rem; color: var(--muted); line-height: 1.5;">
+  💡 <strong>Data Safety:</strong> This register is stored entirely in your local browser cache. Clearing browser history/site data will delete all records. Please use the <strong>Export CSV</strong> button regularly to back up your entries.
+</div>
+
+<script>
+'use strict';
+const DEFAULT_ROWS = 10;
+const STORAGE_KEY = 'lorry_register_v3';
+const STORAGE_KEY_BAK = 'lorry_register_v3_bak';
+let vehicles = [];
+let nextId = 0;
+let _saveTimer = null;
+let _saveStatusTimer = null;
+let _searchTerm = '';
+let _modalCallback = null;
+let _prevFocus = null;
+
+// ── SAFE DUAL-WRITE STORAGE ──
+function buildSaveData() {
+  return {
+    version: 3,
+    ts: Date.now(),
+    globalDate: document.getElementById('globalDate').value,
+    nextId,
+    vehicles: vehicles.map(v => ({
+      id: v.id,
+      vno: (document.querySelector('#card-' + v.id + ' .vno-input')?.value || v.vno || '').trim().toUpperCase(),
+      rows: getRowData(v.id)
+    }))
+  };
+}
+
+function save() {
+  showSaveStatus('saving');
+  try {
+    const json = JSON.stringify(buildSaveData());
+    localStorage.setItem(STORAGE_KEY, json);
+    localStorage.setItem(STORAGE_KEY_BAK, json); // backup copy
+    showSaveStatus('saved');
+  } catch(e) {
+    console.error('Save error:', e);
+    showSaveStatus('error');
+    toast('Save failed — storage may be full. Export CSV now!', 'danger', 5000);
+  }
+}
+
+function saveDebounced(ms) {
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(save, ms || 700);
+}
+
+function load() {
+  for (const key of [STORAGE_KEY, STORAGE_KEY_BAK]) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) continue;
+      const p = JSON.parse(raw);
+      if (p && Array.isArray(p.vehicles)) return p;
+    } catch(e) {}
+  }
+  return null;
+}
+
+function getRowData(vid) {
+  const rows = [];
+  document.querySelectorAll('#body-' + vid + ' tr.data-row').forEach(tr => {
+    rows.push({
+      date: tr.querySelector('input[type="date"]')?.value || '',
+      invoice: tr.querySelector('.cell-input.mono')?.value || '',
+      tonnage: tr.querySelector('.cell-input.tonnage')?.value || ''
+    });
+  });
+  return rows;
+}
+
+// ── SAVE STATUS ──
+function showSaveStatus(state) {
+  const el = document.getElementById('save-status');
+  const txt = document.getElementById('ss-text');
+  clearTimeout(_saveStatusTimer);
+  el.className = 'visible ' + state;
+  txt.textContent = state === 'saving' ? 'Saving…' : state === 'saved' ? 'Saved' : 'Save Error!';
+  if (state === 'saved') _saveStatusTimer = setTimeout(() => { el.className = ''; }, 1800);
+}
+
+// ── TOAST ──
+function toast(msg, type, dur) {
+  type = type || 'info';
+  dur = dur || 3000;
+  const icons = {success:'✅', info:'ℹ️', warn:'⚠️', danger:'❌'};
+  const el = document.createElement('div');
+  el.className = 'toast-item ' + type;
+  el.innerHTML = '<span style="flex-shrink:0">' + (icons[type]||'•') + '</span><span>' + esc(msg) + '</span>';
+  document.getElementById('toast').appendChild(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
+  setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 380); }, dur);
+}
+
+// ── HELPERS ──
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function fmtDate(v) {
+  if (!v) return '';
+  const p = v.split('-');
+  return p.length === 3 ? p[2]+'/'+p[1]+'/'+p[0] : v;
+}
+
+function updateDateDisplay(input) {
+  const d = input.nextElementSibling;
+  if (!d) return;
+  if (input.value) {
+    d.textContent = fmtDate(input.value);
+    d.classList.remove('empty');
+  } else {
+    d.textContent = 'Pick date';
+    d.classList.add('empty');
+  }
+  const card = input.closest('.vehicle-card');
+  if (card) recalc(parseInt(card.dataset.vid));
+}
+
+// ── BUILD ROW ──
+function buildRow(vid, idx, data) {
+  data = data || {};
+  const tr = document.createElement('tr');
+  tr.className = 'data-row';
+  const safeDate = (data.date || '').replace(/[^0-9\-]/g,'');
+  const safeInv = esc(data.invoice || '');
+  const safeTon = (data.tonnage || '').replace(/[^0-9.]/g,'');
+  const tonVal = parseFloat(safeTon) || 0;
+  const safeAmt = tonVal > 0 ? (tonVal * 130).toFixed(2) : '';
+  tr.innerHTML =
+    '<td class="sno">' + idx + '</td>' +
+    '<td><div class="date-cell-wrap">' +
+      '<input type="date" value="' + safeDate + '" onclick="try{this.showPicker()}catch(e){}" onchange="updateDateDisplay(this);saveDebounced()" aria-label="Row ' + idx + ' Date" />' +
+      '<div class="date-display ' + (safeDate?'':'empty') + '">' + (safeDate?fmtDate(safeDate):'Pick date') + '</div>' +
+    '</div></td>' +
+    '<td><input class="cell-input mono" type="text" placeholder="Invoice / Doc No." value="' + safeInv + '" oninput="saveDebounced()" onblur="this.value=this.value.trim()" autocomplete="off" spellcheck="false" aria-label="Row ' + idx + ' Invoice or Document Number" /></td>' +
+    '<td><input class="cell-input tonnage" type="number" step="0.001" min="0" max="9999999" placeholder="0.000" value="' + safeTon + '" oninput="recalc(' + vid + ');saveDebounced()" aria-label="Row ' + idx + ' Tonnage in Tonnes" /></td>' +
+    '<td><input class="cell-input amount tonnage" type="text" value="' + safeAmt + '" readonly tabindex="-1" style="opacity: 0.85; font-weight: 600; text-align: right; background: transparent;" aria-label="Row ' + idx + ' Amount" /></td>' +
+    '<td class="act-cell"><button class="btn-del-row" onclick="deleteRow(this,' + vid + ')" title="Delete row" aria-label="Delete Row ' + idx + '">' +
+      '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+    '</button></td>';
+  return tr;
+}
+
+function renumber(vid) {
+  let i = 1;
+  document.querySelectorAll('#body-' + vid + ' tr.data-row').forEach(tr => {
+    tr.querySelector('.sno').textContent = i++;
+  });
+}
+
+// ── BUILD CARD ──
+function buildCard(v) {
+  const card = document.createElement('div');
+  card.className = 'vehicle-card';
+  card.id = 'card-' + v.id;
+  card.dataset.vid = v.id;
+  const safeVno = esc(v.vno || '');
+  card.innerHTML =
+    '<div class="vehicle-head">' +
+      '<div class="vno-wrap">' +
+        '<span class="vno-label">Vehicle No.</span>' +
+        '<input class="vno-input" type="text" placeholder="AP39XX0000" value="' + safeVno + '" maxlength="14" ' +
+          'oninput="onVnoInput(this,' + v.id + ')" onblur="onVnoBlur(this,' + v.id + ')" autocomplete="off" spellcheck="false" aria-label="Vehicle Number" />' +
+      '</div>' +
+      '<div class="head-right">' +
+        '<div class="trip-badge" id="badge-' + v.id + '">0 Trips · 0.000 T · ₹ 0.00</div>' +
+        '<button class="btn-del-vehicle" onclick="deleteVehicle(' + v.id + ')" aria-label="Remove vehicle table ' + (safeVno || 'unnamed') + '">' +
+          '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+          'Remove</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="table-wrap"><table>' +
+      '<thead><tr>' +
+        '<th class="th-act">#</th>' +
+        '<th style="width:118px">Date</th>' +
+        '<th>Invoice No. / Doc No.</th>' +
+        '<th style="width:100px">Tonnage (T)</th>' +
+        '<th style="width:110px">Amount (₹)</th>' +
+        '<th class="th-act"></th>' +
+      '</tr></thead>' +
+      '<tbody id="body-' + v.id + '"></tbody>' +
+      '<tfoot>' +
+      '<tr class="add-row-row"><td colspan="6">' +
+          '<button class="btn-add-row" onclick="addRow(' + v.id + ')" aria-label="Add entry row to vehicle ' + (safeVno || 'unnamed') + '">' +
+            '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>' +
+            'Add Entry Row' +
+          '</button>' +
+        '</td></tr>' +
+        '<tr class="total-row">' +
+          '<td colspan="3" class="total-label">Trips: <strong id="trips-' + v.id + '">0</strong> &nbsp;|&nbsp; Tonnage:</td>' +
+          '<td class="total-value" id="ton-' + v.id + '" style="text-align:right;">0.000 T</td>' +
+          '<td class="total-value" id="amt-' + v.id + '" style="text-align:right;">₹ 0.00</td>' +
+          '<td></td>' +
+        '</tr>' +
+      '</tfoot>' +
+    '</table></div>';
+
+  const tbody = card.querySelector('#body-' + v.id);
+  const rowsData = (v.rows && v.rows.length) ? v.rows : Array(DEFAULT_ROWS).fill({});
+  rowsData.forEach((rd, i) => tbody.appendChild(buildRow(v.id, i+1, rd)));
+  return card;
+}
+
+// ── VNO INPUT ──
+function onVnoInput(inp, vid) {
+  inp.value = inp.value.toUpperCase();
+  const val = inp.value.trim();
+  let dupe = false;
+  if (val) {
+    vehicles.forEach(v => {
+      if (v.id !== vid) {
+        const other = (document.querySelector('#card-' + v.id + ' .vno-input')?.value || '').trim().toUpperCase();
+        if (other === val) dupe = true;
+      }
+    });
+  }
+  if (dupe) {
+    inp.classList.add('invalid');
+  } else {
+    inp.classList.remove('invalid');
+  }
+  updateGrand();
+  saveDebounced();
+}
+
+function onVnoBlur(inp, vid) {
+  inp.value = inp.value.trim().toUpperCase();
+  const val = inp.value;
+  let dupe = false;
+  if (val) {
+    vehicles.forEach(v => {
+      if (v.id !== vid) {
+        const other = (document.querySelector('#card-' + v.id + ' .vno-input')?.value || '').trim().toUpperCase();
+        if (other === val) dupe = true;
+      }
+    });
+  }
+  if (dupe) {
+    toast('Duplicate vehicle number not allowed. Reverting.', 'danger', 3000);
+    const v = vehicles.find(x => x.id === vid);
+    inp.value = v ? (v.vno || '') : '';
+    inp.classList.remove('invalid');
+  } else {
+    const v = vehicles.find(x => x.id === vid);
+    if (v) v.vno = val;
+    inp.classList.remove('invalid');
+    // Update delete and add buttons aria labels to reflect new vehicle number
+    const card = document.getElementById('card-' + vid);
+    if (card) {
+      const delBtn = card.querySelector('.btn-del-vehicle');
+      if (delBtn) delBtn.setAttribute('aria-label', 'Remove vehicle table ' + (val || 'unnamed'));
+      const addRowBtn = card.querySelector('.btn-add-row');
+      if (addRowBtn) addRowBtn.setAttribute('aria-label', 'Add entry row to vehicle ' + (val || 'unnamed'));
+    }
+  }
+  updateGrand();
+  save();
+}
+
+// ── ADD / DELETE ROW ──
+function addRow(vid) {
+  const tbody = document.getElementById('body-' + vid);
+  if (!tbody) return;
+  const count = tbody.querySelectorAll('tr.data-row').length;
+  const gDate = document.getElementById('globalDate').value;
+  const newRow = buildRow(vid, count+1, { date: gDate });
+  tbody.appendChild(newRow);
+  if (gDate) {
+    const inp = newRow.querySelector('input[type="date"]');
+    if (inp) updateDateDisplay(inp);
+  }
+  recalc(vid);
+  saveDebounced(300);
+  newRow.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  setTimeout(() => newRow.querySelector('.cell-input.mono')?.focus(), 80);
+}
+
+function deleteRow(btn, vid) {
+  const tr = btn.closest('tr');
+  const tbody = document.getElementById('body-' + vid);
+  if (!tbody) return;
+  if (tbody.querySelectorAll('tr.data-row').length <= 1) {
+    toast('Cannot remove the last row', 'warn'); return;
+  }
+  const sno = tr.querySelector('.sno')?.textContent || '';
+  const inv = (tr.querySelector('.cell-input.mono')?.value || '').trim();
+  const ton = tr.querySelector('.cell-input.tonnage')?.value || '';
+  const hasData = inv || ton;
+  showModal({
+    icon:'🗑️', iconType:'danger',
+    title:'Delete this row?',
+    msg: hasData
+      ? 'Row <strong>#' + sno + '</strong>' + (inv ? ' — ' + esc(inv) : '') + (ton ? ' — ' + ton + ' T' : '') + ' will be permanently deleted.'
+      : 'Row <strong>#' + sno + '</strong> (empty) will be removed.',
+    confirmLabel:'Delete Row', confirmClass:'btn-modal-confirm-danger',
+    onConfirm: () => {
+      tr.style.transition='opacity .18s,transform .18s';
+      tr.style.opacity='0';
+      tr.style.transform='translateX(6px)';
+      setTimeout(() => { tr.remove(); renumber(vid); recalc(vid); save(); }, 200);
+    }
+  });
+}
+
+// ── ADD / DELETE VEHICLE ──
+function addVehicle() {
+  const v = { id: nextId++, vno:'', rows: Array(DEFAULT_ROWS).fill({}) };
+  vehicles.push(v);
+  const grid = document.getElementById('vehiclesGrid');
+  const card = buildCard(v);
+  card.style.opacity = '0';
+  card.style.transform = 'translateY(12px)';
+  grid.appendChild(card);
+  requestAnimationFrame(() => {
+    card.style.transition = 'all .28s ease';
+    card.style.opacity = '1';
+    card.style.transform = 'translateY(0)';
+  });
+  card.querySelector('.vno-input')?.focus();
+  updateGrand();
+  save();
+  toast('Vehicle table added', 'success');
+  card.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function deleteVehicle(vid) {
+  const vno = (document.querySelector('#card-' + vid + ' .vno-input')?.value || '').trim();
+  const rows = document.querySelectorAll('#body-' + vid + ' tr.data-row');
+  const hasData = Array.from(rows).some(tr =>
+    tr.querySelector('.cell-input.mono')?.value || tr.querySelector('.cell-input.tonnage')?.value
+  );
+  showModal({
+    icon:'🚛', iconType:'danger',
+    title:'Remove Vehicle Table?',
+    msg: '<strong>' + esc(vno || 'This vehicle') + '</strong> and its <strong>' + rows.length + ' row' + (rows.length!==1?'s':'') + '</strong>' +
+      (hasData ? ' including all entered data' : '') + ' will be permanently removed.',
+    confirmLabel:'Remove Vehicle', confirmClass:'btn-modal-confirm-danger',
+    onConfirm: () => {
+      const card = document.getElementById('card-' + vid);
+      if (!card) return;
+      card.style.transition = 'all .22s ease';
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(-6px)';
+      setTimeout(() => {
+        card.remove();
+        vehicles = vehicles.filter(v => v.id !== vid);
+        updateGrand(); save();
+        toast('Vehicle removed', 'info');
+      }, 230);
+    }
+  });
+}
+
+// ── RECALC ──
+function recalc(vid) {
+  let trips=0, totalTon=0, totalAmt=0;
+  document.querySelectorAll('#body-' + vid + ' tr.data-row').forEach(tr => {
+    const tonInput = tr.querySelector('.cell-input.tonnage');
+    const amtInput = tr.querySelector('.cell-input.amount');
+    const ton = parseFloat(tonInput?.value);
+    if (!isNaN(ton) && ton > 0) {
+      trips++;
+      totalTon += ton;
+      const amt = ton * 130;
+      totalAmt += amt;
+      if (amtInput) amtInput.value = amt.toFixed(2);
+    } else {
+      if (amtInput) amtInput.value = '';
+    }
+  });
+  totalTon = Math.round(totalTon * 1000) / 1000;
+  totalAmt = Math.round(totalAmt * 100) / 100;
+  
+  const eT = document.getElementById('trips-' + vid);
+  const eTon = document.getElementById('ton-' + vid);
+  const eAmt = document.getElementById('amt-' + vid);
+  const eBadge = document.getElementById('badge-' + vid);
+  
+  if (eT) eT.textContent = trips;
+  if (eTon) eTon.textContent = totalTon.toFixed(3) + ' T';
+  if (eAmt) eAmt.textContent = '₹ ' + totalAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  if (eBadge) {
+    eBadge.textContent = trips + ' Trips · ' + totalTon.toFixed(3) + ' T · ₹ ' + totalAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  updateGrand();
+}
+
+function updateGrand() {
+  let gT=0, gTon=0, gAmt=0;
+  const vCount = document.querySelectorAll('.vehicle-card').length;
+  document.querySelectorAll('.vehicle-card').forEach(card => {
+    const vid = parseInt(card.dataset.vid);
+    gT += parseInt(document.getElementById('trips-'+vid)?.textContent||0)||0;
+    gTon += parseFloat((document.getElementById('ton-'+vid)?.textContent||'0').replace(' T',''))||0;
+    const amtStr = document.getElementById('amt-'+vid)?.textContent || '₹ 0.00';
+    const amtVal = parseFloat(amtStr.replace(/[^\d.]/g, '')) || 0;
+    gAmt += amtVal;
+  });
+  gTon = Math.round(gTon * 1000) / 1000;
+  gAmt = Math.round(gAmt * 100) / 100;
+  
+  document.getElementById('grandTrips').textContent = gT;
+  document.getElementById('grandTonnage').textContent = gTon.toFixed(3) + ' T';
+  document.getElementById('grandTonnageAmt').textContent = '₹ ' + gAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  document.getElementById('grandVehicles').textContent = vCount;
+  
+  document.getElementById('statVehicles').textContent = vCount;
+  document.getElementById('statTrips').textContent = gT;
+  document.getElementById('statTon').textContent = gTon.toFixed(3) + ' T';
+  
+  const statAmt = document.getElementById('statAmt');
+  if (statAmt) statAmt.textContent = '₹ ' + gAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+// ── GLOBAL DATE ──
+function applyGlobalDate() {
+  const val = document.getElementById('globalDate').value;
+  if (!val) return;
+  document.querySelectorAll('.date-cell-wrap input[type="date"]').forEach(inp => {
+    if (!inp.value) { inp.value = val; updateDateDisplay(inp); }
+  });
+  saveDebounced(300);
+}
+
+// ── RESET ──
+function resetAll() {
+  showModal({
+    icon:'♻️', iconType:'warning',
+    title:'Reset Entire Register?',
+    msg:'All <strong>' + vehicles.length + ' vehicle table' + (vehicles.length!==1?'s':'') + '</strong> and every entry will be wiped. Consider <strong>Export CSV</strong> first.',
+    confirmLabel:'Yes, Reset All', confirmClass:'btn-modal-confirm-warn',
+    onConfirm: () => {
+      vehicles=[]; nextId=0;
+      document.getElementById('vehiclesGrid').innerHTML='';
+      try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(STORAGE_KEY_BAK); } catch(e){}
+      initDefault(); updateGrand();
+      toast('Register reset', 'warn');
+    }
+  });
+}
+
+// ── SEARCH ──
+function liveSearch(term) {
+  _searchTerm = term.trim().toLowerCase();
+  document.getElementById('searchClear').classList.toggle('visible', _searchTerm.length > 0);
+  document.querySelectorAll('.vehicle-card').forEach(card => {
+    const vno = (card.querySelector('.vno-input')?.value || '').toLowerCase();
+    const vnoMatch = vno.includes(_searchTerm);
+    let rowMatch = false;
+    card.querySelectorAll('tbody tr.data-row').forEach(tr => {
+      const inv = (tr.querySelector('.cell-input.mono')?.value || '').toLowerCase();
+      const ton = tr.querySelector('.cell-input.tonnage')?.value || '';
+      const m = !_searchTerm || inv.includes(_searchTerm) || ton.includes(_searchTerm);
+      tr.classList.toggle('search-match', _searchTerm.length > 0 && m);
+      if (m) rowMatch = true;
+    });
+    card.classList.toggle('search-hidden', !!_searchTerm && !vnoMatch && !rowMatch);
+  });
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  liveSearch('');
+  document.getElementById('searchInput').focus();
+}
+
+// ── EXPORT CSV ──
+function exportCSV() {
+  const sheetDate = document.getElementById('globalDate').value;
+  const rows = ['Sheet Date,' + sheetDate, '', 'Vehicle No,Date,Invoice/Doc No,Tonnage (T),Amount (₹)'];
+  let gtT=0, gtTon=0, gtAmt=0;
+  vehicles.forEach(v => {
+    const vno = (document.querySelector('#card-' + v.id + ' .vno-input')?.value||'').trim();
+    let vT=0, vTon=0, vAmt=0;
+    document.querySelectorAll('#body-' + v.id + ' tr.data-row').forEach(tr => {
+      const date = tr.querySelector('input[type="date"]')?.value||'';
+      const inv = (tr.querySelector('.cell-input.mono')?.value||'').trim();
+      const ton = tr.querySelector('.cell-input.tonnage')?.value||'';
+      const tonV = parseFloat(ton)||0;
+      const amtV = tonV * 130;
+      if (date||inv||ton) {
+        rows.push([ce(vno), ce(date?fmtDate(date):''), ce(inv), tonV>0?tonV.toFixed(3):'', tonV>0?amtV.toFixed(2):''].join(','));
+        if (tonV>0){vT++;vTon+=tonV;vAmt+=amtV;}
+      }
+    });
+    if (vno) {
+      rows.push([ce(vno),'',ce('VEHICLE TOTAL'),(Math.round(vTon*1000)/1000).toFixed(3),(Math.round(vAmt*100)/100).toFixed(2)].join(','));
+      rows.push('');
+    }
+    gtT+=vT; gtTon+=vTon; gtAmt+=vAmt;
+  });
+  rows.push('');
+  rows.push(['GRAND TOTAL','',gtT+' Trips',(Math.round(gtTon*1000)/1000).toFixed(3)+' T',(Math.round(gtAmt*100)/100).toFixed(2)+' ₹'].join(','));
+  const blob = new Blob([rows.join('\r\n')], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'lorry_register_' + (sheetDate||new Date().toISOString().split('T')[0]) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('CSV exported', 'success');
+}
+
+function ce(v) {
+  if (!v) return '';
+  return /[,"\n\r]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v;
+}
+
+// ── IMPORT CSV ──
+function importCSV(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  event.target.value = '';
+  showModal({
+    icon:'📥', iconType:'warning',
+    title:'Import CSV?',
+    msg:'This will <strong>replace all current data</strong> with <strong>' + esc(file.name) + '</strong>. Export first if needed.',
+    confirmLabel:'Import & Replace', confirmClass:'btn-modal-confirm-warn',
+    onConfirm: () => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        try { parseAndLoadCSV(e.target.result); toast('CSV imported successfully', 'success'); }
+        catch(err) { toast('Import failed: ' + err.message, 'danger', 5000); }
+      };
+      reader.onerror = () => toast('Could not read file', 'danger');
+      reader.readAsText(file);
+    }
+  });
+}
+
+function parseDateToISO(str) {
+  if (!str) return '';
+  str = str.trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+  const parts = str.split(/[\/\-]/);
+  if (parts.length !== 3) return '';
+  let day, month, year;
+  if (parts[0].length === 4) {
+    year = parseInt(parts[0], 10);
+    month = parseInt(parts[1], 10);
+    day = parseInt(parts[2], 10);
+  } else if (parts[2].length === 4 || parts[2].length === 2) {
+    year = parseInt(parts[2], 10);
+    if (year < 100) year += 2000;
+    const p0 = parseInt(parts[0], 10);
+    const p1 = parseInt(parts[1], 10);
+    if (p0 > 12) {
+      day = p0;
+      month = p1;
+    } else if (p1 > 12) {
+      day = p1;
+      month = p0;
+    } else {
+      day = p0;
+      month = p1;
+    }
+  } else {
+    return '';
+  }
+  if (isNaN(day) || isNaN(month) || isNaN(year)) return '';
+  if (month < 1 || month > 12 || day < 1 || day > 31) return '';
+  return year + '-' + String(month).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+}
+
+function parseAndLoadCSV(text) {
+  const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  let start = 0;
+  for (let i=0;i<Math.min(6,lines.length);i++) {
+    if (lines[i].startsWith('Vehicle No,')) { start=i+1; break; }
+  }
+  const byVno={}, order=[];
+  for (let i=start;i<lines.length;i++) {
+    const c = parseCSVLine(lines[i]);
+    if (!c[0]) continue;
+    const cleanFirst = c[0].trim().toUpperCase();
+    if (cleanFirst === 'SHEET DATE' || cleanFirst === 'VEHICLE NO' || c[2] === 'VEHICLE TOTAL' || c[2] === 'GRAND TOTAL') continue;
+    const vno = cleanFirst;
+    if (!byVno[vno]) { byVno[vno]=[]; order.push(vno); }
+    const dr=c[1]||'';
+    const iso=parseDateToISO(dr);
+    byVno[vno].push({date:iso,invoice:c[2]||'',tonnage:c[3]||''});
+  }
+  if (!order.length) throw new Error('No data rows found');
+  vehicles=[]; nextId=0;
+  const grid=document.getElementById('vehiclesGrid');
+  grid.innerHTML='';
+  order.forEach(vno => {
+    const v={id:nextId++,vno,rows:byVno[vno]};
+    vehicles.push(v);
+    grid.appendChild(buildCard(v));
+  });
+  vehicles.forEach(v=>recalc(v.id));
+  updateGrand(); save();
+}
+
+function parseCSVLine(line) {
+  const r=[];let cur='',q=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(q){if(c==='"'&&line[i+1]==='"'){cur+='"';i++;}else if(c==='"')q=false;else cur+=c;}
+    else{if(c==='"')q=true;else if(c===','){r.push(cur);cur='';}else cur+=c;}
+  }
+  r.push(cur);return r;
+}
+
+// ── MODAL ──
+function showModal(cfg) {
+  _prevFocus = document.activeElement;
+  document.getElementById('modal-icon').textContent = cfg.icon;
+  document.getElementById('modal-icon').className = 'modal-icon ' + cfg.iconType;
+  document.getElementById('modal-title').textContent = cfg.title;
+  document.getElementById('modal-msg').innerHTML = cfg.msg;
+  const btn = document.getElementById('modal-confirm-btn');
+  btn.textContent = cfg.confirmLabel;
+  btn.className = 'btn ' + cfg.confirmClass;
+  _modalCallback = cfg.onConfirm;
+  const ov = document.getElementById('modal-overlay');
+  ov.classList.add('open');
+  ov.setAttribute('aria-hidden','false');
+  setTimeout(() => btn.focus(), 120);
+}
+function closeModal() {
+  const ov = document.getElementById('modal-overlay');
+  ov.classList.remove('open');
+  ov.setAttribute('aria-hidden','true');
+  _modalCallback = null;
+  if (_prevFocus) { try{_prevFocus.focus();}catch(e){} _prevFocus=null; }
+}
+function modalConfirm() { const cb=_modalCallback; closeModal(); if(cb) cb(); }
+function modalOutsideClick(e) { if(e.target.id==='modal-overlay') closeModal(); }
+
+// ── PRINT ──
+function confirmPrint() {
+  const gd = document.getElementById('globalDate').value;
+  document.getElementById('printDate').textContent = gd ? fmtDate(gd) : new Date().toLocaleDateString('en-IN');
+  showModal({
+    icon:'🖨️', iconType:'info',
+    title:'Print Register?',
+    msg:'Print dialog will open. Set paper to <strong>A4</strong> and enable <strong>Background Graphics</strong> for best results.',
+    confirmLabel:'Print Now', confirmClass:'btn-modal-confirm-blue',
+    onConfirm: () => window.print()
+  });
+}
+
+// ── KEYBOARD SHORTCUTS ──
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); if(_searchTerm) clearSearch(); return; }
+  
+  // Alt-based shortcuts to prevent overriding browser defaults
+  if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+    const key = e.key.toLowerCase();
+    if (key === 'n') { e.preventDefault(); addVehicle(); }
+    if (key === 'f') { e.preventDefault(); document.getElementById('searchInput')?.focus(); }
+  }
+  
+  // Keep Ctrl+S and Ctrl+P with custom handlers
+  if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey) {
+    const key = e.key.toLowerCase();
+    if (key === 's') { e.preventDefault(); clearTimeout(_saveTimer); save(); toast('Saved', 'success', 1500); }
+    if (key === 'p') { e.preventDefault(); confirmPrint(); }
+  }
+});
+
+// ── FLUSH SAVE ON UNLOAD ──
+window.addEventListener('beforeunload', () => { if(_saveTimer){ clearTimeout(_saveTimer); save(); } });
+
+// ── THEME MANAGER ──
+function toggleTheme() {
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem('lorry_register_theme', isDark ? 'dark' : 'light');
+  updateThemeUI();
+}
+
+function updateThemeUI() {
+  const isDark = document.body.classList.contains('dark');
+  const sun = document.querySelector('.sun-icon');
+  const moon = document.querySelector('.moon-icon');
+  if (sun && moon) {
+    if (isDark) {
+      sun.style.display = 'block';
+      moon.style.display = 'none';
+    } else {
+      sun.style.display = 'none';
+      moon.style.display = 'block';
+    }
+  }
+}
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('lorry_register_theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    document.body.classList.add('dark');
+  } else {
+    document.body.classList.remove('dark');
+  }
+  updateThemeUI();
+}
+
+// ── INIT ──
+function initDefault() {
+  const defs = [
+    {id:nextId++,vno:'AP39WR3849',rows:Array(DEFAULT_ROWS).fill({})},
+    {id:nextId++,vno:'AP39WS1666',rows:Array(DEFAULT_ROWS).fill({})},
+    {id:nextId++,vno:'',rows:Array(DEFAULT_ROWS).fill({})},
+    {id:nextId++,vno:'',rows:Array(DEFAULT_ROWS).fill({})},
+  ];
+  vehicles=defs;
+  const grid=document.getElementById('vehiclesGrid');
+  grid.innerHTML='';
+  vehicles.forEach(v=>grid.appendChild(buildCard(v)));
+}
+
+function init() {
+  initTheme();
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('globalDate').value = today;
+  document.getElementById('printDate').textContent = fmtDate(today);
+  const saved = load();
+  if (saved) {
+    nextId = saved.nextId||0;
+    vehicles = saved.vehicles||[];
+    if (saved.globalDate) {
+      document.getElementById('globalDate').value = saved.globalDate;
+      document.getElementById('printDate').textContent = fmtDate(saved.globalDate);
+    }
+    const grid = document.getElementById('vehiclesGrid');
+    grid.innerHTML='';
+    vehicles.forEach(v=>grid.appendChild(buildCard(v)));
+    vehicles.forEach(v=>recalc(v.id));
+    toast('Data restored from last session','success',2500);
+  } else {
+    initDefault();
+  }
+  updateGrand();
+}
+
+init();
+</script>
+</body>
+</html>
