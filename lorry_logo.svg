@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="512" height="512">
+  <rect width="32" height="32" rx="8" fill="#1A3C6E"/>
+  <!-- Lorry body -->
+  <path d="M6 10h13v10H6z" fill="#FFFFFF"/>
+  <path d="M19 12h4l3 3v5h-7z" fill="#FFFFFF"/>
+  <!-- Cabin Window -->
+  <path d="M20 13h2.5l1.5 1.5V16h-4z" fill="#1A3C6E"/>
+  <!-- Wheels -->
+  <circle cx="10" cy="22" r="2.5" fill="#FFFFFF"/>
+  <circle cx="10" cy="22" r="1" fill="#1A3C6E"/>
+  <circle cx="21" cy="22" r="2.5" fill="#FFFFFF"/>
+  <circle cx="21" cy="22" r="1" fill="#1A3C6E"/>
+  <!-- Cargo Slots Details -->
+  <rect x="8" y="12" width="2" height="6" fill="#1A3C6E" rx="0.5"/>
+  <rect x="12" y="12" width="2" height="6" fill="#1A3C6E" rx="0.5"/>
+  <rect x="16" y="12" width="2" height="6" fill="#1A3C6E" rx="0.5"/>
+</svg>
