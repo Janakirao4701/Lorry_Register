@@ -1,18 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 32" width="512" height="512">
   <defs>
-    <linearGradient id="light-beam" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#FFF8C2" stop-opacity="0.8"/>
+    <linearGradient id="light-beam" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0%" stop-color="#FFF8C2" stop-opacity="0.9"/>
       <stop offset="100%" stop-color="#FFF8C2" stop-opacity="0"/>
     </linearGradient>
   </defs>
   <g transform="scale(-1,1) translate(-40,0)">
     <!-- Light Beam Cone -->
-    <polygon points="31.5,16.5 38.5,11.5 38.5,22.5 31.5,17.5" fill="url(#light-beam)" opacity="0.3"/>
+    <polygon points="31.5,16.5 38.5,11.5 38.5,22.5 31.5,17.5" fill="url(#light-beam)" opacity="0.35"/>
     
-    <!-- Light Rays (perfectly aligned with headlight center) -->
-    <line x1="31.5" y1="17" x2="38" y2="13" stroke="#FFF8C2" stroke-width="0.8" opacity="0.8"/>
-    <line x1="31.5" y1="17" x2="39" y2="17" stroke="#FFF8C2" stroke-width="0.8" opacity="0.8"/>
-    <line x1="31.5" y1="17" x2="38" y2="21" stroke="#FFF8C2" stroke-width="0.8" opacity="0.8"/>
+    <!-- Light Rays (fading out using the same gradient) -->
+    <line x1="31.5" y1="16.5" x2="38.5" y2="12" stroke="url(#light-beam)" stroke-width="0.8"/>
+    <line x1="31.5" y1="17" x2="39.5" y2="17" stroke="url(#light-beam)" stroke-width="0.8"/>
+    <line x1="31.5" y1="17.5" x2="38.5" y2="22" stroke="url(#light-beam)" stroke-width="0.8"/>
     
     <!-- Lorry Body -->
     <rect x="1" y="10" width="20" height="13" rx="1.5" fill="#E8F0F7" stroke="#BFC8D4" stroke-width="0.5"/>
