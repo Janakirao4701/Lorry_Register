@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lorry Trips Register — Smart Logistics Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230F172A'/%3E%3Ccircle cx='12' cy='20' r='3' fill='%2338BDF8'/%3E%3Ccircle cx='22' cy='20' r='3' fill='%2338BDF8'/%3E%3Cpath d='M8 12h10v6H8zM18 14h5v4h-5z' fill='%2338BDF8'/%3E%3C/svg%3E">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --bg: #030712;
+  --surface: #0f172a;
+  --surface-rgb: 15, 23, 42;
+  --border: #1f2937;
+  --text: #f9fafb;
+  --muted: #9ca3af;
+  --primary: #38bdf8;
+  --primary-glow: rgba(56, 189, 248, 0.15);
+  --accent: #10b981;
+  --accent-glow: rgba(16, 185, 129, 0.15);
+  --font-sans: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* 3D Scene Background Canvas */
+#webgl-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Page Wrapper */
+.content-wrapper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+/* Header Navbar */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 16px 24px;
+  background: rgba(3, 7, 18, 0.6);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+}
+
+.logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logo-text {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.logo-tag {
+  background: var(--primary-glow);
+  color: var(--primary);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #030712;
+  box-shadow: 0 4px 14px var(--primary-glow);
+  border: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.35);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Sections Grid Layout */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Hero Section */
+.hero-section {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 100px;
+  position: relative;
+}
+
+.hero-content {
+  max-width: 580px;
+  margin-top: -40px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--primary);
+  margin-bottom: 12px;
+  display: inline-block;
+}
+
+.hero-title {
+  font-size: 3.2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-desc {
+  font-size: 1rem;
+  color: var(--muted);
+  max-width: 480px;
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.scroll-line {
+  width: 40px;
+  height: 1.5px;
+  background: var(--muted);
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-line::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: var(--primary);
+  animation: scroll-flow 2s infinite ease-in-out;
+}
+
+@keyframes scroll-flow {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+/* Features Bento Grid Section */
+.features-section {
+  padding: 120px 0;
+}
+
+.section-head {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.section-desc {
+  color: var(--muted);
+  max-width: 520px;
+  margin: 0 auto;
+  font-size: 0.95rem;
+}
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 60px;
+}
+
+.bento-card {
+  background: rgba(var(--surface-rgb), 0.55);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 32px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bento-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(56, 189, 248, 0.2);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+.col-2 {
+  grid-column: span 2;
+}
+
+.card-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  color: var(--primary);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bento-card.accent-card .card-icon {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.15);
+  color: var(--accent);
+}
+
+.card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.card-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* Call-to-action Section */
+.cta-section {
+  padding: 100px 0 160px;
+}
+
+.cta-box {
+  background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.1), transparent), var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  padding: 60px 48px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-box::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}
+
+.cta-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+.cta-desc {
+  color: var(--muted);
+  max-width: 480px;
+  margin: 0 auto 32px;
+  font-size: 0.92rem;
+}
+
+.cta-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* Footer styling */
+footer {
+  padding: 30px 24px;
+  background: #02050c;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  text-align: center;
+}
+
+.footer-text {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Responsiveness Media Queries */
+@media (max-width: 1024px) {
+  .hero-title {
+    font-size: 2.8rem;
+  }
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .col-2 {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 12px 16px;
+  }
+  .hero-section {
+    padding-top: 120px;
+    align-items: center;
+    text-align: center;
+    min-height: calc(100dvh - 60px);
+  }
+  .hero-content {
+    margin-top: 0;
+  }
+  .hero-title {
+    font-size: 2.3rem;
+  }
+  .hero-desc {
+    margin: 0 auto 24px;
+  }
+  .hero-actions {
+    justify-content: center;
+  }
+  .scroll-indicator {
+    display: none;
+  }
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+  .col-2 {
+    grid-column: span 1;
+  }
+  .cta-box {
+    padding: 40px 24px;
+  }
+  .cta-title {
+    font-size: 1.8rem;
+  }
+  .cta-actions {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+}
+</style>
+</head>
+<body>
+
+<canvas id="webgl-canvas"></canvas>
+
+<div class="content-wrapper">
+  <!-- Navigation Header -->
+  <header>
+    <a href="#" class="logo-wrap">
+      <span class="logo-text">Adding Value</span>
+      <span class="logo-tag">Trips v4</span>
+    </a>
+    <a href="index.html" class="btn btn-primary btn-sm">Start Register</a>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="container hero-section">
+    <div class="hero-content">
+      <span class="eyebrow">Offline Logistics Cockpit</span>
+      <h1 class="hero-title">Next-Gen Lorry Trips Register</h1>
+      <p class="hero-desc">Track trips, automate tonnages, calculate payouts, and export styled spreadsheets instantly from a zero-latency, local-first cockpit.</p>
+      <div class="hero-actions">
+        <a href="index.html" class="btn btn-primary">Launch Console</a>
+        <a href="#features" class="btn btn-outline">Explore Features</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+      <span>Scroll to Drive</span>
+    </div>
+  </section>
+
+  <!-- Features Bento Grid -->
+  <section class="container features-section" id="features">
+    <div class="section-head">
+      <span class="eyebrow" style="margin-bottom: 8px;">Capabilities</span>
+      <h2 class="section-title">Designed for Operators</h2>
+      <p class="section-desc">A visual, hyper-responsive console equipped for rugged, real-world fleet logistics.</p>
+    </div>
+    
+    <div class="bento-grid">
+      <!-- Feature 1 -->
+      <div class="bento-card col-2">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        </div>
+        <div>
+          <h3 class="card-title">Pure Local-First Storage</h3>
+          <p class="card-desc">No accounts, no clouds, no latency. All vehicle tables, trip numbers, and rates are written directly to your browser's persistent cache. Works 100% offline, even at remote weighbridge loading docks.</p>
+        </div>
+      </div>
+      
+      <!-- Feature 2 -->
+      <div class="bento-card accent-card">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+        </div>
+        <div>
+          <h3 class="card-title">Production-Level Excel</h3>
+          <p class="card-desc">Generates formatted .xls spreadsheets with dark blue headings, gridlines, and highlighted totals directly from the screen.</p>
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="bento-card">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div>
+          <h3 class="card-title">Double Date Filters</h3>
+          <p class="card-desc">Filter hundreds of rows using responsive From and To range pickers. Instantly updates totals and export targets.</p>
+        </div>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="bento-card col-2">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <h3 class="card-title">Built-in Double Write Backups</h3>
+          <p class="card-desc">Data integrity secured via simultaneous storage writes and share link compression (Version 4). Easily backup and restore your entire register fleet via raw CSV files.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Box Section -->
+  <section class="container cta-section">
+    <div class="cta-box">
+      <h2 class="cta-title">Upgrade Your Trip Logging</h2>
+      <p class="cta-desc">Launch the offline register console now to manage your vehicle fleet trips, rates, and styled sheet exports.</p>
+      <div class="cta-actions">
+        <a href="index.html" class="btn btn-primary">Start Register</a>
+        <a href="index.html" class="btn btn-outline">Restore Backup</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-text">Adding Value Transport &copy; 2026. Local-first application.</div>
+  </footer>
+</div>
+
+<!-- Load Three.js Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ── 3D WEBGL SCENE SETUP ──
+const canvas = document.getElementById('webgl-canvas');
+const scene = new THREE.Scene();
+
+// Camera
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(0, 3, 10);
+
+// Renderer
+const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+// Lights
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+scene.add(ambientLight);
+
+const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+dirLight.position.set(5, 10, 5);
+scene.add(dirLight);
+
+const bluePointLight = new THREE.PointLight(0x00a3ff, 2.5, 20);
+bluePointLight.position.set(-3, 2, 2);
+scene.add(bluePointLight);
+
+const greenPointLight = new THREE.PointLight(0x10b981, 1.5, 20);
+greenPointLight.position.set(3, 1, -2);
+scene.add(greenPointLight);
+
+// ── PROGRAMMATIC 3D LORRY CONSTRUCTION ──
+const truckGroup = new THREE.Group();
+
+// Materials
+const wireMaterial = new THREE.MeshPhongMaterial({
+  color: 0x38bdf8,
+  wireframe: true,
+  transparent: true,
+  opacity: 0.85
+});
+const cargoWireMaterial = new THREE.MeshPhongMaterial({
+  color: 0x10b981,
+  wireframe: true,
+  transparent: true,
+  opacity: 0.7
+});
+const chassisWireMaterial = new THREE.MeshPhongMaterial({
+  color: 0x64748b,
+  wireframe: true,
+  transparent: true,
+  opacity: 0.6
+});
+const glassMaterial = new THREE.MeshPhongMaterial({
+  color: 0x38bdf8,
+  transparent: true,
+  opacity: 0.25,
+  flatShading: true
+});
+const lightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+
+// Chassis Frame
+const chassis = new THREE.Mesh(new THREE.BoxGeometry(6.8, 0.3, 1.8), chassisWireMaterial);
+chassis.position.y = 0.5;
+truckGroup.add(chassis);
+
+// Driver Cabin
+const cabin = new THREE.Mesh(new THREE.BoxGeometry(2.0, 1.6, 1.8), wireMaterial);
+cabin.position.set(-2.2, 1.35, 0);
+truckGroup.add(cabin);
+
+// Slanted Windshield
+const windshield = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.8, 1.7), glassMaterial);
+windshield.position.set(-3.21, 1.6, 0);
+windshield.rotation.z = Math.PI / 6;
+truckGroup.add(windshield);
+
+// Big Cargo Container
+const cargo = new THREE.Mesh(new THREE.BoxGeometry(4.4, 2.0, 2.0), cargoWireMaterial);
+cargo.position.set(1.0, 1.55, 0);
+truckGroup.add(cargo);
+
+// Wheels (6 wheels spinning)
+const wheelGeometry = new THREE.CylinderGeometry(0.48, 0.48, 0.35, 12);
+const wheelsList = [];
+const wheelPositions = [
+  { x: -2.0, z: 0.95 },
+  { x: -2.0, z: -0.95 },
+  { x: 0.2, z: 1.05 },
+  { x: 0.2, z: -1.05 },
+  { x: 1.6, z: 1.05 },
+  { x: 1.6, z: -1.05 }
+];
+
+wheelPositions.forEach(pos => {
+  const wheel = new THREE.Mesh(wheelGeometry, chassisWireMaterial);
+  wheel.rotation.x = Math.PI / 2;
+  wheel.position.set(pos.x, 0.38, pos.z);
+  truckGroup.add(wheel);
+  wheelsList.push(wheel);
+});
+
+// Glowing Headlights
+const headlightGeom = new THREE.SphereGeometry(0.12, 8, 8);
+const leftHeadlight = new THREE.Mesh(headlightGeom, lightMaterial);
+leftHeadlight.position.set(-3.21, 0.85, 0.65);
+const rightHeadlight = leftHeadlight.clone();
+rightHeadlight.position.z = -0.65;
+truckGroup.add(leftHeadlight);
+truckGroup.add(rightHeadlight);
+
+// Headlight Beams (Volumetric Light Cones)
+const beamGeometry = new THREE.ConeGeometry(0.7, 5.0, 16, 1, true);
+const beamMaterial = new THREE.MeshBasicMaterial({
+  color: 0x38bdf8,
+  transparent: true,
+  opacity: 0.12,
+  side: THREE.DoubleSide
+});
+const leftBeam = new THREE.Mesh(beamGeometry, beamMaterial);
+leftBeam.position.set(-5.6, 0.85, 0.65);
+leftBeam.rotation.z = Math.PI / 2;
+const rightBeam = leftBeam.clone();
+rightBeam.position.z = -0.65;
+truckGroup.add(leftBeam);
+truckGroup.add(rightBeam);
+
+scene.add(truckGroup);
+
+// Initial Truck Position
+truckGroup.position.set(2, 0, 0);
+truckGroup.rotation.y = -Math.PI / 3.2;
+
+// ── INFINITE HIGHWAY GRID ──
+const gridHelper = new THREE.GridHelper(80, 40, 0x1f2937, 0x111827);
+gridHelper.position.y = 0;
+scene.add(gridHelper);
+
+// ── FLOATING CARGO CUBES ──
+const cubesCount = 12;
+const cubes = [];
+const cubeGeom = new THREE.BoxGeometry(0.4, 0.4, 0.4);
+const cubeMaterial = new THREE.MeshPhongMaterial({
+  color: 0x38bdf8,
+  wireframe: true,
+  transparent: true,
+  opacity: 0.4
+});
+
+for(let i=0; i<cubesCount; i++) {
+  const c = new THREE.Mesh(cubeGeom, cubeMaterial);
+  c.position.set(
+    (Math.random() - 0.5) * 16,
+    Math.random() * 4 + 0.5,
+    (Math.random() - 0.5) * 10
+  );
+  scene.add(c);
+  cubes.push(c);
+}
+
+// ── SCROLL STEERING PATH ──
+let scrollY = 0;
+window.addEventListener('scroll', () => {
+  scrollY = window.scrollY;
+});
+
+// ── MOUSE PARALLAX TILT ──
+let mouseX = 0, mouseY = 0;
+window.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+  mouseY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+});
+
+// ── RESIZING HANDLER ──
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ── ANIMATION LOOP ──
+const clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+  const time = clock.getElapsedTime();
+  
+  // 1. Spinning Wheels
+  wheelsList.forEach(w => {
+    w.rotation.y -= 0.15; // Rotate wheel on hub
+  });
+
+  // 2. Engine Vibration Rumble
+  // Apply a small sine wave wobbling to the chassis and cabin relative to wheels
+  chassis.position.y = 0.5 + Math.sin(time * 65) * 0.007;
+  cabin.position.y = 1.35 + Math.sin(time * 65 + 0.2) * 0.007;
+  cargo.position.y = 1.55 + Math.sin(time * 45) * 0.006;
+  leftBeam.position.y = 0.85 + Math.sin(time * 65) * 0.007;
+  rightBeam.position.y = 0.85 + Math.sin(time * 65) * 0.007;
+
+  // 3. Infinite Grid Highway Movement
+  // Shift grid texture offset or position manually to loop
+  gridHelper.position.z = (time * 8) % 2;
+
+  // 4. Floating Cubes Rotations
+  cubes.forEach((c, idx) => {
+    c.rotation.x += 0.005;
+    c.rotation.y += 0.01;
+    c.position.y += Math.sin(time + idx) * 0.002;
+  });
+
+  // 5. Scroll Steering Path
+  // As user scrolls, the lorry moves along curve and camera positions adjust
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  const scrollFraction = maxScroll > 0 ? scrollY / maxScroll : 0;
+  
+  // Drive lorry forward and turn slightly on scroll
+  truckGroup.position.x = 2.0 - scrollFraction * 4.8;
+  truckGroup.position.z = -scrollFraction * 2.2;
+  truckGroup.rotation.y = -Math.PI / 3.2 - scrollFraction * 0.45;
+
+  // 6. Mouse Parallax Tilt
+  // Tilt camera based on mouse coords
+  camera.position.x += (mouseX * 2.0 - camera.position.x) * 0.05;
+  camera.position.y += (3.0 - mouseY * 1.5 - camera.position.y) * 0.05;
+  camera.lookAt(new THREE.Vector3(truckGroup.position.x - 1, 1, truckGroup.position.z));
+
+  renderer.render(scene, camera);
+}
+
+// Start rendering
+animate();
+</script>
+</body>
+</html>

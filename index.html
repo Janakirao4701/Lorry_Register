@@ -3,63 +3,66 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lorry Trips Register — Adding Value Transport</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='cargo-grad' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%' stop-color='%2300A3FF'/%3E%3Cstop offset='100%' stop-color='%230055D0'/%3E%3C/linearGradient%3E%3ClinearGradient id='cabin-grad' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%' stop-color='%233CD0FF'/%3E%3Cstop offset='100%' stop-color='%230080FF'/%3E%3C/linearGradient%3E%3ClinearGradient id='glass-grad' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%' stop-color='%231E293B'/%3E%3Cstop offset='100%' stop-color='%230F172A'/%3E%3C/linearGradient%3E%3ClinearGradient id='tyre-grad' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%' stop-color='%2364748B'/%3E%3Cstop offset='100%' stop-color='%23334155'/%3E%3C/linearGradient%3E%3ClinearGradient id='hub-grad' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%' stop-color='%23E2E8F0'/%3E%3Cstop offset='100%' stop-color='%2394A3B8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='6' y='21.5' width='20' height='2' rx='1' fill='%231E293B'/%3E%3Crect x='11.5' y='6.5' width='18.5' height='16' rx='2.5' fill='url(%23cargo-grad)'/%3E%3Cpath d='M 12,10.5 L 8,10.5 C 7,10.5 6.2,11.2 5.5,12.5 L 3.2,16.5 C 2.5,17.8 2.5,19 2.5,20 L 2.5,21.5 C 2.5,22.2 3.1,22.8 3.8,22.8 L 12,22.8 Z' fill='url(%23cabin-grad)'/%3E%3Cpath d='M 9.5,12.5 L 7.8,12.5 C 7.4,12.5 7.1,12.7 6.8,13.2 L 5.2,16.2 C 4.9,16.8 5.1,17.5 5.7,17.5 L 9.5,17.5 Z' fill='url(%23glass-grad)'/%3E%3Cpath d='M 8.5,13.2 L 7.7,13.2 L 6.2,16.2 L 7.0,16.2 Z' fill='%23FFFFFF' opacity='0.25'/%3E%3Crect x='2.5' y='18' width='0.6' height='1.6' rx='0.3' fill='%23FBBF24'/%3E%3Crect x='2' y='21.5' width='1.2' height='1.3' rx='0.4' fill='%2364748B'/%3E%3Ccircle cx='7.5' cy='24' r='4.2' fill='url(%23tyre-grad)'/%3E%3Ccircle cx='7.5' cy='24' r='2.4' fill='url(%23hub-grad)'/%3E%3Ccircle cx='7.5' cy='24' r='0.9' fill='%23F8FAFC'/%3E%3Ccircle cx='24.5' cy='24' r='4.2' fill='url(%23tyre-grad)'/%3E%3Ccircle cx='24.5' cy='24' r='2.4' fill='url(%23hub-grad)'/%3E%3Ccircle cx='24.5' cy='24' r='0.9' fill='%23F8FAFC'/%3E%3C/svg%3E">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  --bg:#EDF1F7;
-  --surface:#fff;
-  --primary:#1A3C6E;
-  --primary-light:#2E74B5;
+  --bg:#F1F5F9;
+  --surface:#ffffff;
+  --primary:#0F172A;
+  --primary-light:#2563EB;
   --primary-xlight:#EFF6FF;
-  --accent:#E07B2A;
-  --green:#15803D;
-  --green-bg:#DCFCE7;
-  --green-border:#86EFAC;
+  --header-bg:#0F172A;
+  --accent:#EA580C;
+  --green:#10B981;
+  --green-bg:#D1FAE5;
+  --green-border:#A7F3D0;
   --row-alt:#F8FAFC;
   --border:#E2E8F0;
   --text:#0F172A;
   --muted:#64748B;
   --input-focus:#DBEAFE;
-  --danger:#DC2626;
+  --danger:#EF4444;
   --danger-bg:#FEE2E2;
-  --danger-border:#FECACA;
-  --warn:#D97706;
+  --danger-border:#FCA5A5;
+  --warn:#F59E0B;
   --warn-bg:#FEF3C7;
-  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
-  --shadow-md:0 4px 10px rgba(0,0,0,.09),0 2px 4px rgba(0,0,0,.05);
+  --shadow:0 1px 3px rgba(15,23,42,0.03), 0 4px 12px rgba(15,23,42,0.03);
+  --shadow-md:0 10px 25px -5px rgba(15,23,42,0.08), 0 8px 16px -6px rgba(15,23,42,0.04);
   --radius:12px;
 }
 
 body.dark {
-  --bg:#0F172A;
-  --surface:#1E293B;
+  --bg:#090D16;
+  --surface:#111827;
   --primary:#38BDF8;
   --primary-light:#38BDF8;
-  --primary-xlight:rgba(56, 189, 248, 0.12);
+  --primary-xlight:rgba(56, 189, 248, 0.08);
+  --header-bg:#111827;
   --accent:#F59E0B;
-  --green:#4ADE80;
-  --green-bg:rgba(74, 222, 128, 0.1);
-  --green-border:rgba(74, 222, 128, 0.2);
-  --row-alt:#1E293B;
-  --border:#334155;
-  --text:#F1F5F9;
-  --muted:#94A3B8;
-  --input-focus:#1E293B;
+  --green:#34D399;
+  --green-bg:rgba(52, 211, 153, 0.08);
+  --green-border:rgba(52, 211, 153, 0.15);
+  --row-alt:#111827;
+  --border:#1F2937;
+  --text:#F9FAFB;
+  --muted:#9CA3AF;
+  --input-focus:#1F293D;
   --danger:#F87171;
   --danger-bg:rgba(248, 113, 113, 0.1);
   --danger-border:rgba(248, 113, 113, 0.2);
   --warn:#FBBF24;
   --warn-bg:rgba(251, 191, 36, 0.1);
-  --shadow:0 1px 3px rgba(0,0,0,.3),0 1px 2px rgba(0,0,0,.2);
-  --shadow-md:0 10px 15px -3px rgba(0,0,0,0.4),0 4px 6px -2px rgba(0,0,0,0.3);
+  --shadow:0 0 0 1px rgba(255,255,255,0.015), 0 4px 20px rgba(0,0,0,0.3);
+  --shadow-md:0 0 0 1px rgba(255,255,255,0.03), 0 12px 30px rgba(0,0,0,0.45);
 }
 
 html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:18px 16px 80px;transition:background 0.3s, color 0.3s}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:18px 16px 80px;line-height:1.5;transition:background 0.3s, color 0.3s}
 
 #toast{position:fixed;top:18px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:300px}
 .toast-item{background:#1E293B;color:#fff;padding:11px 16px 11px 14px;border-radius:9px;font-size:.8rem;font-weight:500;
@@ -112,7 +115,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}60%{box-shadow:0 0 0 5px rgba(34,197,94,0)}}
 
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:none;
-  font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;
+  font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;
   transition:all 0.2s cubic-bezier(0.4, 0, 0.2, 1);white-space:nowrap;outline:none}
 .btn:focus-visible{box-shadow:0 0 0 3px rgba(46,116,181,.4)}
 .btn svg{width:14px;height:14px;flex-shrink:0}
@@ -134,20 +137,22 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .btn-sm{padding:6px 11px;font-size:.73rem}
 
 .page-header{
-  background:linear-gradient(135deg,#1A3C6E 0%,#1e4d8c 55%,#1e5499 100%);
+  background:var(--header-bg);
   color:#fff;border-radius:var(--radius);padding:18px 22px;margin-bottom:18px;
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
-  box-shadow:0 4px 18px rgba(26,60,110,.38)}
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow:var(--shadow-md)}
 .header-left h1{font-size:1.12rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:9px}
-.header-left .sub{font-size:.71rem;color:#93C5FD;margin-top:4px;letter-spacing:.02em}
+.header-left .sub{font-size:.71rem;color:rgba(255,255,255,0.6);margin-top:4px;letter-spacing:.02em}
 .live-dot{width:8px;height:8px;border-radius:50%;background:#22C55E;display:inline-block;flex-shrink:0;animation:pulse 2.4s infinite}
 .header-right{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.date-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:7px 12px}
-.date-pill label{font-size:.66rem;color:#93C5FD;white-space:nowrap;font-weight:700;text-transform:uppercase;letter-spacing:.06em;cursor:pointer}
+.date-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:7px 12px}
+.date-pill label{font-size:.66rem;color:rgba(255,255,255,0.65);white-space:nowrap;font-weight:700;text-transform:uppercase;letter-spacing:.06em;cursor:pointer}
 .date-pill input{background:transparent;border:none;color:#fff;font-family:'JetBrains Mono',monospace;
   font-size:.85rem;font-weight:600;outline:none;width:122px;cursor:pointer}
 .date-pill input::-webkit-calendar-picker-indicator{filter:invert(1);cursor:pointer;opacity:.7}
+body.dark input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);cursor:pointer;opacity:.7}
 
 .stats-bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
 .stat-card{background:var(--surface);border-radius:10px;padding:12px 16px;flex:1;min-width:120px;
@@ -167,7 +172,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .search-wrap{position:relative;display:flex;align-items:center}
 .search-wrap .s-icon{position:absolute;left:9px;color:var(--muted);pointer-events:none;flex-shrink:0}
 #searchInput{border:1.5px solid var(--border);border-radius:8px;padding:7px 28px 7px 31px;
-  font-family:'Inter',sans-serif;font-size:.8rem;background:var(--surface);color:var(--text);outline:none;
+  font-family:inherit;font-size:.8rem;background:var(--surface);color:var(--text);outline:none;
   width:200px;transition:all .15s}
 #searchInput:focus{border-color:var(--primary-light);background:var(--input-focus);width:240px;box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);}
 #searchInput::placeholder{color:#CBD5E1}
@@ -182,23 +187,28 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .vehicle-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
 .vehicle-card.search-hidden{display:none}
 
-.vehicle-head{background:linear-gradient(90deg,#1A3C6E,#1e5298);
-  padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.vehicle-head{background:var(--header-bg);
+  padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  border-bottom:1px solid var(--border)}
 .vno-wrap{display:flex;align-items:center;gap:8px}
-.vno-label{font-size:.6rem;color:#93C5FD;font-weight:700;text-transform:uppercase;letter-spacing:.09em;white-space:nowrap}
+.vno-label{font-size:.6rem;color:rgba(255,255,255,0.65);font-weight:700;text-transform:uppercase;letter-spacing:.09em;white-space:nowrap}
 .vno-input{font-family:'JetBrains Mono',monospace;font-size:.95rem;font-weight:700;
   color:#fff;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);
   border-radius:6px;padding:5px 10px;outline:none;width:165px;text-transform:uppercase;transition:all .15s}
 .vno-input:focus{border-color:#60A5FA;background:rgba(255,255,255,.18)}
 .vno-input::placeholder{color:rgba(255,255,255,.3);font-weight:400}
 .vno-input.invalid{border-color:#FCA5A5!important;background:rgba(220,38,38,.18)!important}
-.head-right{display:flex;align-items:center;gap:8px}
+.head-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .trip-badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
   border-radius:20px;padding:4px 12px;font-size:.7rem;color:#E0F2FE;font-weight:600;white-space:nowrap}
 .btn-del-vehicle{background:rgba(220,38,38,.18);border:1px solid rgba(220,38,38,.28);
   color:#FCA5A5;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:.7rem;
-  font-family:'Inter',sans-serif;font-weight:600;transition:all .15s;display:flex;align-items:center;gap:5px}
+  font-family:inherit;font-weight:600;transition:all .15s;display:flex;align-items:center;gap:5px}
 .btn-del-vehicle:hover{background:rgba(220,38,38,.4);color:#fff}
+.btn-export-vehicle{background:rgba(56,189,248,.18);border:1px solid rgba(56,189,248,.28);
+  color:#BAE6FD;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:.7rem;
+  font-family:inherit;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.btn-export-vehicle:hover{background:rgba(56,189,248,.4);color:#fff}
 
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{width:100%;border-collapse:collapse;min-width:460px}
@@ -212,6 +222,8 @@ tbody tr{transition:background .08s}
 tbody tr:nth-child(even){background:var(--row-alt)}
 tbody tr:hover{background:var(--primary-xlight)}
 tbody tr.search-match{background:var(--warn-bg)!important}
+tbody tr.date-hidden{display:none!important}
+.cell-input.trips{text-align:center;font-weight:600}
 tbody td{padding:3px 5px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:middle}
 tbody td:last-child{border-right:none}
 td.sno{text-align:center;font-family:'JetBrains Mono',monospace;font-size:.72rem;
@@ -223,7 +235,7 @@ td.act-cell{width:36px;text-align:center;padding:2px}
 .btn-del-row:hover{color:var(--danger);background:var(--danger-bg)}
 
 .cell-input{width:100%;border:1.5px solid transparent;border-radius:5px;padding:5px 7px;
-  font-family:'Inter',sans-serif;font-size:.8rem;background:transparent;color:var(--text);
+  font-family:inherit;font-size:.8rem;background:transparent;color:var(--text);
   outline:none;transition:border-color .15s,background .15s}
 .cell-input:focus{border-color:var(--primary-light);background:var(--input-focus);box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);}
 .cell-input.mono{font-family:'JetBrains Mono',monospace;font-size:.77rem;letter-spacing:.02em}
@@ -232,7 +244,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
 .date-cell-wrap{position:relative;width:100%}
 .date-cell-wrap input[type=date]{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2}
-.date-display{font-size:.8rem;font-family:'Inter',sans-serif;color:var(--text);padding:5px 7px;
+.date-display{font-size:.8rem;font-family:inherit;color:var(--text);padding:5px 7px;
   min-height:30px;display:flex;align-items:center;border:1.5px solid transparent;border-radius:5px;
   transition:all .15s;cursor:pointer;user-select:none;white-space:nowrap;pointer-events:none}
 .date-display.empty{color:var(--muted);font-style:italic;font-size:.72rem}
@@ -307,8 +319,9 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   .vehicle-head{flex-direction:column;align-items:stretch;gap:8px;padding:12px 14px}
   .vno-wrap{justify-content:space-between;width:100%}
   .vno-input{flex:1;max-width:unset;width:auto}
-  .head-right{justify-content:space-between;width:100%}
-  .btn-del-vehicle{padding:5px 12px;font-size:0.75rem}
+  .head-right{justify-content:space-between;width:100%;flex-wrap:wrap;gap:6px}
+  .btn-del-vehicle, .btn-export-vehicle{padding:8px 14px;font-size:0.75rem;flex:1 1 auto;justify-content:center}
+  .btn-del-row {padding:8px 12px;min-height:38px;min-width:38px}
   
   /* Table wrap setting */
   table{min-width:560px}
@@ -347,9 +360,13 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <div class="sub">Adding Value Transport &nbsp;·&nbsp; Daily Entry Sheet &nbsp;·&nbsp; Auto-saved offline</div>
   </div>
   <div class="header-right">
-    <div class="date-pill" title="Sheet date — auto-fills new rows" onclick="try{document.getElementById('globalDate').showPicker()}catch(e){}">
-      <label for="globalDate" onclick="event.stopPropagation()">Sheet Date</label>
-      <input type="date" id="globalDate" onchange="applyGlobalDate()" onclick="event.stopPropagation(); try{this.showPicker()}catch(e){}" />
+    <div class="date-pill" title="Start date — filters table rows" onclick="try{document.getElementById('fromDate').showPicker()}catch(e){}">
+      <label for="fromDate" onclick="event.stopPropagation()">From</label>
+      <input type="date" id="fromDate" onchange="applyDateFilter()" onclick="event.stopPropagation(); try{this.showPicker()}catch(e){}" />
+    </div>
+    <div class="date-pill" title="End date — filters table rows" onclick="try{document.getElementById('toDate').showPicker()}catch(e){}">
+      <label for="toDate" onclick="event.stopPropagation()">To</label>
+      <input type="date" id="toDate" onchange="applyDateFilter()" onclick="event.stopPropagation(); try{this.showPicker()}catch(e){}" />
     </div>
     <button class="btn btn-ghost theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
       <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none; width:14px; height:14px;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -364,12 +381,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
 <div class="print-only" id="printHeader">Adding Value Transport — Lorry Trips Register &nbsp;|&nbsp; <span id="printDate"></span></div>
 
-<div class="stats-bar">
-  <div class="stat-card"><div class="s-label">Vehicles</div><div class="s-value" id="statVehicles">0</div><div class="s-sub">active tables</div></div>
-  <div class="stat-card accent"><div class="s-label">Total Trips</div><div class="s-value" id="statTrips">0</div><div class="s-sub">with tonnage</div></div>
-  <div class="stat-card green"><div class="s-label">Total Tonnage</div><div class="s-value" id="statTon">0.000 T</div><div class="s-sub">all vehicles</div></div>
-  <div class="stat-card green"><div class="s-label">Total Amount</div><div class="s-value" id="statAmt">₹ 0.00</div><div class="s-sub">@ ₹130 / Ton</div></div>
-</div>
+
 
 <div class="toolbar">
   <div class="toolbar-left">
@@ -387,6 +399,10 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <button class="btn btn-outline btn-sm" onclick="generateShareLink()" title="Generate shareable link">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
       Share Link
+    </button>
+    <button class="btn btn-outline btn-sm" onclick="exportExcel()" title="Download styled Excel sheet">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+      Export Excel
     </button>
     <button class="btn btn-outline btn-sm" onclick="exportCSV()" title="Download CSV backup">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -424,6 +440,10 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
       Share
     </button>
+    <button class="btn btn-white btn-sm" onclick="exportExcel()" title="Download styled Excel sheet">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+      Excel
+    </button>
     <button class="btn btn-white btn-sm" onclick="exportCSV()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Export
@@ -455,9 +475,10 @@ let _prevFocus = null;
 // ── SAFE DUAL-WRITE STORAGE ──
 function buildSaveData() {
   return {
-    version: 3,
+    version: 4,
     ts: Date.now(),
-    globalDate: document.getElementById('globalDate').value,
+    fromDate: document.getElementById('fromDate').value,
+    toDate: document.getElementById('toDate').value,
     nextId,
     vehicles: vehicles.map(v => ({
       id: v.id,
@@ -503,7 +524,7 @@ function getRowData(vid) {
   document.querySelectorAll('#body-' + vid + ' tr.data-row').forEach(tr => {
     rows.push({
       date: tr.querySelector('input[type="date"]')?.value || '',
-      invoice: tr.querySelector('.cell-input.mono')?.value || '',
+      trips: tr.querySelector('.cell-input.trips')?.value || '',
       tonnage: tr.querySelector('.cell-input.tonnage')?.value || ''
     });
   });
@@ -512,21 +533,22 @@ function getRowData(vid) {
 
 // ── SHAREABLE LINK STATE COMPRESSION & ENCODING ──
 function packData() {
-  const version = '3';
-  const globalDate = document.getElementById('globalDate').value;
-  const parts = [version, globalDate];
+  const version = '4';
+  const fromDate = document.getElementById('fromDate').value;
+  const toDate = document.getElementById('toDate').value;
+  const parts = [version, fromDate, toDate];
   
   vehicles.forEach(v => {
     const vno = (document.querySelector('#card-' + v.id + ' .vno-input')?.value || v.vno || '').trim().toUpperCase();
     const rows = [];
     document.querySelectorAll('#body-' + v.id + ' tr.data-row').forEach(tr => {
       const date = tr.querySelector('input[type="date"]')?.value || '';
-      const invoice = (tr.querySelector('.cell-input.mono')?.value || '').trim();
+      const trips = (tr.querySelector('.cell-input.trips')?.value || '').trim();
       const tonnage = tr.querySelector('.cell-input.tonnage')?.value || '';
-      if (date || invoice || tonnage) {
+      if (date || trips || tonnage) {
         rows.push([
           encodeURIComponent(date),
-          encodeURIComponent(invoice),
+          encodeURIComponent(trips),
           encodeURIComponent(tonnage)
         ].join(','));
       }
@@ -542,35 +564,61 @@ function unpackData(str) {
   try {
     const parts = str.split('|');
     const version = parts[0];
-    const globalDate = parts[1] || '';
-    const vehiclesData = [];
-    
-    for (let i = 2; i < parts.length; i++) {
-      const vPart = parts[i];
-      const semiIndex = vPart.indexOf(';');
-      let vno = '';
-      let rowParts = [];
-      if (semiIndex !== -1) {
-        vno = decodeURIComponent(vPart.substring(0, semiIndex));
-        const rowsStr = vPart.substring(semiIndex + 1);
-        if (rowsStr) {
-          rowParts = rowsStr.split(';');
+    if (version === '4') {
+      const fromDate = parts[1] || '';
+      const toDate = parts[2] || '';
+      const vehiclesData = [];
+      for (let i = 3; i < parts.length; i++) {
+        const vPart = parts[i];
+        const semiIndex = vPart.indexOf(';');
+        let vno = '';
+        let rowParts = [];
+        if (semiIndex !== -1) {
+          vno = decodeURIComponent(vPart.substring(0, semiIndex));
+          const rowsStr = vPart.substring(semiIndex + 1);
+          if (rowsStr) rowParts = rowsStr.split(';');
+        } else {
+          vno = decodeURIComponent(vPart);
         }
-      } else {
-        vno = decodeURIComponent(vPart);
+        const rows = rowParts.map(rStr => {
+          const rParts = rStr.split(',');
+          return {
+            date: decodeURIComponent(rParts[0] || ''),
+            trips: decodeURIComponent(rParts[1] || ''),
+            tonnage: decodeURIComponent(rParts[2] || '')
+          };
+        });
+        vehiclesData.push({ vno, rows });
       }
-      
-      const rows = rowParts.map(rStr => {
-        const rParts = rStr.split(',');
-        return {
-          date: decodeURIComponent(rParts[0] || ''),
-          invoice: decodeURIComponent(rParts[1] || ''),
-          tonnage: decodeURIComponent(rParts[2] || '')
-        };
-      });
-      vehiclesData.push({ vno, rows });
+      return { fromDate, toDate, vehicles: vehiclesData };
+    } else {
+      // Legacy fallback (version 3)
+      const globalDate = parts[1] || '';
+      const vehiclesData = [];
+      for (let i = 2; i < parts.length; i++) {
+        const vPart = parts[i];
+        const semiIndex = vPart.indexOf(';');
+        let vno = '';
+        let rowParts = [];
+        if (semiIndex !== -1) {
+          vno = decodeURIComponent(vPart.substring(0, semiIndex));
+          const rowsStr = vPart.substring(semiIndex + 1);
+          if (rowsStr) rowParts = rowsStr.split(';');
+        } else {
+          vno = decodeURIComponent(vPart);
+        }
+        const rows = rowParts.map(rStr => {
+          const rParts = rStr.split(',');
+          return {
+            date: decodeURIComponent(rParts[0] || ''),
+            trips: decodeURIComponent(rParts[1] || ''),
+            tonnage: decodeURIComponent(rParts[2] || '')
+          };
+        });
+        vehiclesData.push({ vno, rows });
+      }
+      return { fromDate: globalDate, toDate: globalDate, vehicles: vehiclesData };
     }
-    return { globalDate, vehicles: vehiclesData };
   } catch(e) {
     console.error('Unpacking failed:', e);
     return null;
@@ -635,9 +683,12 @@ function checkShareLink() {
       try {
         vehicles = [];
         nextId = 0;
-        if (data.globalDate) {
-          document.getElementById('globalDate').value = data.globalDate;
-          document.getElementById('printDate').textContent = fmtDate(data.globalDate);
+        if (data.fromDate || data.toDate) {
+          document.getElementById('fromDate').value = data.fromDate || '';
+          document.getElementById('toDate').value = data.toDate || '';
+        } else if (data.globalDate) {
+          document.getElementById('fromDate').value = data.globalDate;
+          document.getElementById('toDate').value = data.globalDate;
         }
         data.vehicles.forEach(vData => {
           const vno = vData.vno || '';
@@ -646,7 +697,7 @@ function checkShareLink() {
           for (let i = 0; i < Math.max(DEFAULT_ROWS, rawRows.length); i++) {
             const rr = rawRows[i];
             if (rr) {
-              rows.push({ date: rr.date || '', invoice: rr.invoice || '', tonnage: rr.tonnage || '' });
+              rows.push({ date: rr.date || '', trips: rr.trips || rr.invoice || '', tonnage: rr.tonnage || '' });
             } else {
               rows.push({});
             }
@@ -656,7 +707,7 @@ function checkShareLink() {
         const grid = document.getElementById('vehiclesGrid');
         grid.innerHTML = '';
         vehicles.forEach(v => grid.appendChild(buildCard(v)));
-        vehicles.forEach(v => recalc(v.id));
+        applyDateFilter();
         updateGrand();
         save();
         toast('Shared data loaded successfully!', 'success');
@@ -718,8 +769,8 @@ function buildRow(vid, idx, data) {
   data = data || {};
   const tr = document.createElement('tr');
   tr.className = 'data-row';
-  const safeDate = (data.date || '').replace(/[^0-9\-]/g,'');
-  const safeInv = esc(data.invoice || '');
+  const safeDate = parseDateToISO(data.date || '');
+  const safeTrips = esc(data.trips || data.invoice || '');
   const safeTon = (data.tonnage || '').replace(/[^0-9.]/g,'');
   const tonVal = parseFloat(safeTon) || 0;
   const safeAmt = tonVal > 0 ? (tonVal * 130).toFixed(2) : '';
@@ -729,7 +780,7 @@ function buildRow(vid, idx, data) {
       '<input type="date" value="' + safeDate + '" onclick="try{this.showPicker()}catch(e){}" onchange="updateDateDisplay(this);saveDebounced()" aria-label="Row ' + idx + ' Date" />' +
       '<div class="date-display ' + (safeDate?'':'empty') + '">' + (safeDate?fmtDate(safeDate):'Pick date') + '</div>' +
     '</div></td>' +
-    '<td><input class="cell-input mono" type="text" placeholder="Invoice / Doc No." value="' + safeInv + '" oninput="saveDebounced()" onblur="this.value=this.value.trim()" autocomplete="off" spellcheck="false" aria-label="Row ' + idx + ' Invoice or Document Number" /></td>' +
+    '<td><input class="cell-input mono trips" type="number" min="0" step="any" placeholder="No. of Trips" value="' + safeTrips + '" oninput="recalc(' + vid + ');saveDebounced()" onblur="this.value=this.value.trim()" autocomplete="off" spellcheck="false" aria-label="Row ' + idx + ' Number of Trips" /></td>' +
     '<td><input class="cell-input tonnage" type="number" step="0.001" min="0" max="9999999" placeholder="0.000" value="' + safeTon + '" oninput="recalc(' + vid + ');saveDebounced()" aria-label="Row ' + idx + ' Tonnage in Tonnes" /></td>' +
     '<td><input class="cell-input amount tonnage" type="text" value="' + safeAmt + '" readonly tabindex="-1" style="opacity: 0.85; font-weight: 600; text-align: right; background: transparent;" aria-label="Row ' + idx + ' Amount" /></td>' +
     '<td class="act-cell"><button class="btn-del-row" onclick="deleteRow(this,' + vid + ')" title="Delete row" aria-label="Delete Row ' + idx + '">' +
@@ -761,6 +812,12 @@ function buildCard(v) {
       '</div>' +
       '<div class="head-right">' +
         '<div class="trip-badge" id="badge-' + v.id + '">0 Trips · 0.000 T · ₹ 0.00</div>' +
+        '<button class="btn-export-vehicle" onclick="exportVehicleExcel(' + v.id + ')" aria-label="Export vehicle data ' + (safeVno || 'unnamed') + '" style="margin-right: 4px;">' +
+          '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>' +
+          'Export Excel</button>' +
+        '<button class="btn-export-vehicle" onclick="exportVehicleCSV(' + v.id + ')" aria-label="Export vehicle data ' + (safeVno || 'unnamed') + '" style="margin-right: 4px;">' +
+          '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' +
+          'Export CSV</button>' +
         '<button class="btn-del-vehicle" onclick="deleteVehicle(' + v.id + ')" aria-label="Remove vehicle table ' + (safeVno || 'unnamed') + '">' +
           '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
           'Remove</button>' +
@@ -770,7 +827,7 @@ function buildCard(v) {
       '<thead><tr>' +
         '<th class="th-act">#</th>' +
         '<th style="width:118px">Date</th>' +
-        '<th>Invoice No. / Doc No.</th>' +
+        '<th>No. of Trips</th>' +
         '<th style="width:100px">Tonnage (T)</th>' +
         '<th style="width:110px">Amount (₹)</th>' +
         '<th class="th-act"></th>' +
@@ -784,7 +841,8 @@ function buildCard(v) {
           '</button>' +
         '</td></tr>' +
         '<tr class="total-row">' +
-          '<td colspan="3" class="total-label">Trips: <strong id="trips-' + v.id + '">0</strong> &nbsp;|&nbsp; Tonnage:</td>' +
+          '<td colspan="2" class="total-label">Total:</td>' +
+          '<td class="total-value" id="trips-' + v.id + '" style="text-align:center;">0</td>' +
           '<td class="total-value" id="ton-' + v.id + '" style="text-align:right;">0.000 T</td>' +
           '<td class="total-value" id="amt-' + v.id + '" style="text-align:right;">₹ 0.00</td>' +
           '<td></td>' +
@@ -841,13 +899,15 @@ function onVnoBlur(inp, vid) {
     const v = vehicles.find(x => x.id === vid);
     if (v) v.vno = val;
     inp.classList.remove('invalid');
-    // Update delete and add buttons aria labels to reflect new vehicle number
+    // Update delete, add, and export buttons aria labels to reflect new vehicle number
     const card = document.getElementById('card-' + vid);
     if (card) {
       const delBtn = card.querySelector('.btn-del-vehicle');
       if (delBtn) delBtn.setAttribute('aria-label', 'Remove vehicle table ' + (val || 'unnamed'));
       const addRowBtn = card.querySelector('.btn-add-row');
       if (addRowBtn) addRowBtn.setAttribute('aria-label', 'Add entry row to vehicle ' + (val || 'unnamed'));
+      const exportBtn = card.querySelector('.btn-export-vehicle');
+      if (exportBtn) exportBtn.setAttribute('aria-label', 'Export vehicle data ' + (val || 'unnamed'));
     }
   }
   updateGrand();
@@ -859,17 +919,18 @@ function addRow(vid) {
   const tbody = document.getElementById('body-' + vid);
   if (!tbody) return;
   const count = tbody.querySelectorAll('tr.data-row').length;
-  const gDate = document.getElementById('globalDate').value;
-  const newRow = buildRow(vid, count+1, { date: gDate });
+  // Default to toDate if set, else fromDate, else today
+  const defaultDate = document.getElementById('toDate').value || document.getElementById('fromDate').value || new Date().toISOString().split('T')[0];
+  const newRow = buildRow(vid, count+1, { date: defaultDate });
   tbody.appendChild(newRow);
-  if (gDate) {
+  if (defaultDate) {
     const inp = newRow.querySelector('input[type="date"]');
     if (inp) updateDateDisplay(inp);
   }
   recalc(vid);
   saveDebounced(300);
   newRow.scrollIntoView({ behavior:'smooth', block:'nearest' });
-  setTimeout(() => newRow.querySelector('.cell-input.mono')?.focus(), 80);
+  setTimeout(() => newRow.querySelector('.cell-input.trips')?.focus(), 80);
 }
 
 function deleteRow(btn, vid) {
@@ -880,14 +941,14 @@ function deleteRow(btn, vid) {
     toast('Cannot remove the last row', 'warn'); return;
   }
   const sno = tr.querySelector('.sno')?.textContent || '';
-  const inv = (tr.querySelector('.cell-input.mono')?.value || '').trim();
+  const tripsVal = (tr.querySelector('.cell-input.trips')?.value || '').trim();
   const ton = tr.querySelector('.cell-input.tonnage')?.value || '';
-  const hasData = inv || ton;
+  const hasData = tripsVal || ton;
   showModal({
     icon:'🗑️', iconType:'danger',
     title:'Delete this row?',
     msg: hasData
-      ? 'Row <strong>#' + sno + '</strong>' + (inv ? ' — ' + esc(inv) : '') + (ton ? ' — ' + ton + ' T' : '') + ' will be permanently deleted.'
+      ? 'Row <strong>#' + sno + '</strong>' + (tripsVal ? ' — ' + esc(tripsVal) + ' trips' : '') + (ton ? ' — ' + ton + ' T' : '') + ' will be permanently deleted.'
       : 'Row <strong>#' + sno + '</strong> (empty) will be removed.',
     confirmLabel:'Delete Row', confirmClass:'btn-modal-confirm-danger',
     onConfirm: () => {
@@ -924,7 +985,7 @@ function deleteVehicle(vid) {
   const vno = (document.querySelector('#card-' + vid + ' .vno-input')?.value || '').trim();
   const rows = document.querySelectorAll('#body-' + vid + ' tr.data-row');
   const hasData = Array.from(rows).some(tr =>
-    tr.querySelector('.cell-input.mono')?.value || tr.querySelector('.cell-input.tonnage')?.value
+    tr.querySelector('.cell-input.trips')?.value || tr.querySelector('.cell-input.tonnage')?.value
   );
   showModal({
     icon:'🚛', iconType:'danger',
@@ -952,11 +1013,19 @@ function deleteVehicle(vid) {
 function recalc(vid) {
   let trips=0, totalTon=0, totalAmt=0;
   document.querySelectorAll('#body-' + vid + ' tr.data-row').forEach(tr => {
+    // Exclude hidden rows from totals calculation
+    if (tr.classList.contains('date-hidden')) return;
+
     const tonInput = tr.querySelector('.cell-input.tonnage');
     const amtInput = tr.querySelector('.cell-input.amount');
-    const ton = parseFloat(tonInput?.value);
-    if (!isNaN(ton) && ton > 0) {
-      trips++;
+    const tripsInput = tr.querySelector('.cell-input.trips');
+    
+    const ton = parseFloat(tonInput?.value) || 0;
+    const tVal = parseFloat(tripsInput?.value);
+    const rowTrips = !isNaN(tVal) ? tVal : (ton > 0 ? 1 : 0);
+    
+    if (ton > 0 || rowTrips > 0) {
+      trips += rowTrips;
       totalTon += ton;
       const amt = ton * 130;
       totalAmt += amt;
@@ -979,20 +1048,54 @@ function recalc(vid) {
   if (eBadge) {
     eBadge.textContent = trips + ' Trips · ' + totalTon.toFixed(3) + ' T · ₹ ' + totalAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
+  
+  // Cache the totals on the vehicle object in memory
+  const vObj = vehicles.find(x => x.id === vid);
+  if (vObj) {
+    vObj.cachedTrips = trips;
+    vObj.cachedTonnage = totalTon;
+    vObj.cachedAmount = totalAmt;
+  }
+  
   updateGrand();
 }
 
 function updateGrand() {
-  let gT=0, gTon=0, gAmt=0;
-  const vCount = document.querySelectorAll('.vehicle-card').length;
-  document.querySelectorAll('.vehicle-card').forEach(card => {
-    const vid = parseInt(card.dataset.vid);
-    gT += parseInt(document.getElementById('trips-'+vid)?.textContent||0)||0;
-    gTon += parseFloat((document.getElementById('ton-'+vid)?.textContent||'0').replace(' T',''))||0;
-    const amtStr = document.getElementById('amt-'+vid)?.textContent || '₹ 0.00';
-    const amtVal = parseFloat(amtStr.replace(/[^\d.]/g, '')) || 0;
-    gAmt += amtVal;
+  let gT=0, gTon=0, gAmt=0, vCount=0;
+  
+  vehicles.forEach(v => {
+    // Check if vehicle card is currently in the DOM
+    const card = document.getElementById('card-' + v.id);
+    if (!card) return;
+    const vno = (card.querySelector('.vno-input')?.value || v.vno || '').trim();
+    if (vno) vCount++;
+    
+    // Use cached values if they exist, otherwise perform a single card DOM query
+    if (v.cachedTrips === undefined) {
+      let trips=0, totalTon=0, totalAmt=0;
+      document.querySelectorAll('#body-' + v.id + ' tr.data-row').forEach(tr => {
+        if (tr.classList.contains('date-hidden')) return;
+        const tonInput = tr.querySelector('.cell-input.tonnage');
+        const tripsInput = tr.querySelector('.cell-input.trips');
+        const ton = parseFloat(tonInput?.value) || 0;
+        const tVal = parseFloat(tripsInput?.value);
+        const rowTrips = !isNaN(tVal) ? tVal : (ton > 0 ? 1 : 0);
+        if (ton > 0 || rowTrips > 0) {
+          trips += rowTrips;
+          totalTon += ton;
+          totalAmt += ton * 130;
+        }
+      });
+      v.cachedTrips = trips;
+      v.cachedTonnage = Math.round(totalTon * 1000) / 1000;
+      v.cachedAmount = Math.round(totalAmt * 100) / 100;
+    }
+    
+    gT += v.cachedTrips;
+    gTon += v.cachedTonnage;
+    gAmt += v.cachedAmount;
   });
+  
   gTon = Math.round(gTon * 1000) / 1000;
   gAmt = Math.round(gAmt * 100) / 100;
   
@@ -1001,20 +1104,76 @@ function updateGrand() {
   document.getElementById('grandTonnageAmt').textContent = '₹ ' + gAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   document.getElementById('grandVehicles').textContent = vCount;
   
-  document.getElementById('statVehicles').textContent = vCount;
-  document.getElementById('statTrips').textContent = gT;
-  document.getElementById('statTon').textContent = gTon.toFixed(3) + ' T';
-  
-  const statAmt = document.getElementById('statAmt');
-  if (statAmt) statAmt.textContent = '₹ ' + gAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  // Empty State Sync
+  const grid = document.getElementById('vehiclesGrid');
+  if (vehicles.length === 0) {
+    if (!document.getElementById('empty-state')) {
+      const emptyDiv = document.createElement('div');
+      emptyDiv.id = 'empty-state';
+      emptyDiv.style.cssText = 'grid-column: 1 / -1; text-align: center; padding: 48px 24px; color: var(--muted); background: var(--surface); border: 2.2px dashed var(--border); border-radius: 12px; margin: 10px 0; box-shadow: var(--shadow);';
+      emptyDiv.innerHTML = `
+        <div style="font-size: 2.5rem; margin-bottom: 12px; filter: grayscale(0.2);">🚛</div>
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 8px; color: var(--text);">No Vehicles Found</h3>
+        <p style="font-size: 0.78rem; max-width: 290px; margin: 0 auto 16px auto; line-height: 1.45; color: var(--muted);">Create a new vehicle table to start recording daily trips, tonnages, and payments.</p>
+        <button class="btn btn-primary btn-sm" onclick="addVehicle()">+ Add Vehicle Table</button>
+      `;
+      grid.appendChild(emptyDiv);
+    }
+  } else {
+    const emptyDiv = document.getElementById('empty-state');
+    if (emptyDiv) emptyDiv.remove();
+  }
 }
 
-// ── GLOBAL DATE ──
-function applyGlobalDate() {
-  const val = document.getElementById('globalDate').value;
-  if (!val) return;
-  document.querySelectorAll('.date-cell-wrap input[type="date"]').forEach(inp => {
-    if (!inp.value) { inp.value = val; updateDateDisplay(inp); }
+// ── DATE FILTER ──
+function applyDateFilter() {
+  const fromVal = document.getElementById('fromDate').value;
+  const toVal = document.getElementById('toDate').value;
+  
+  const cleanFrom = parseDateToISO(fromVal);
+  const cleanTo = parseDateToISO(toVal);
+  
+  if (cleanFrom && cleanTo && cleanFrom > cleanTo) {
+    toast('From Date cannot be later than To Date. Resetting range.', 'warn');
+    document.getElementById('toDate').value = fromVal;
+    applyDateFilter();
+    return;
+  }
+  
+  let rangeStr = '';
+  if (cleanFrom && cleanTo) {
+    rangeStr = fmtDate(cleanFrom) + ' to ' + fmtDate(cleanTo);
+  } else if (cleanFrom) {
+    rangeStr = 'From ' + fmtDate(cleanFrom);
+  } else if (cleanTo) {
+    rangeStr = 'To ' + fmtDate(cleanTo);
+  } else {
+    rangeStr = 'All Dates';
+  }
+  document.getElementById('printDate').textContent = rangeStr;
+
+  vehicles.forEach(v => {
+    delete v.cachedTrips;
+    delete v.cachedTonnage;
+    delete v.cachedAmount;
+    
+    const tbody = document.getElementById('body-' + v.id);
+    if (!tbody) return;
+    tbody.querySelectorAll('tr.data-row').forEach(tr => {
+      const rawDate = tr.querySelector('input[type="date"]')?.value || '';
+      const rowDate = parseDateToISO(rawDate);
+      let isMatch = true;
+      if (rowDate) {
+        if (cleanFrom && rowDate < cleanFrom) isMatch = false;
+        if (cleanTo && rowDate > cleanTo) isMatch = false;
+      }
+      if (isMatch) {
+        tr.classList.remove('date-hidden');
+      } else {
+        tr.classList.add('date-hidden');
+      }
+    });
+    recalc(v.id);
   });
   saveDebounced(300);
 }
@@ -1030,7 +1189,10 @@ function resetAll() {
       vehicles=[]; nextId=0;
       document.getElementById('vehiclesGrid').innerHTML='';
       try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(STORAGE_KEY_BAK); } catch(e){}
-      initDefault(); updateGrand();
+      initDefault();
+      setInitialDateRange();
+      applyDateFilter();
+      updateGrand();
       toast('Register reset', 'warn');
     }
   });
@@ -1045,9 +1207,10 @@ function liveSearch(term) {
     const vnoMatch = vno.includes(_searchTerm);
     let rowMatch = false;
     card.querySelectorAll('tbody tr.data-row').forEach(tr => {
-      const inv = (tr.querySelector('.cell-input.mono')?.value || '').toLowerCase();
+      const tripsVal = (tr.querySelector('.cell-input.trips')?.value || '').toLowerCase();
       const ton = tr.querySelector('.cell-input.tonnage')?.value || '';
-      const m = !_searchTerm || inv.includes(_searchTerm) || ton.includes(_searchTerm);
+      const dateVal = tr.querySelector('.date-display')?.textContent.toLowerCase() || '';
+      const m = !_searchTerm || tripsVal.includes(_searchTerm) || ton.includes(_searchTerm) || dateVal.includes(_searchTerm);
       tr.classList.toggle('search-match', _searchTerm.length > 0 && m);
       if (m) rowMatch = true;
     });
@@ -1063,21 +1226,26 @@ function clearSearch() {
 
 // ── EXPORT CSV ──
 function exportCSV() {
-  const sheetDate = document.getElementById('globalDate').value;
-  const rows = ['Sheet Date,' + sheetDate, '', 'Vehicle No,Date,Invoice/Doc No,Tonnage (T),Amount (₹)'];
+  const fromDate = document.getElementById('fromDate').value;
+  const toDate = document.getElementById('toDate').value;
+  const rangeStr = (fromDate ? fmtDate(fromDate) : '') + ' to ' + (toDate ? fmtDate(toDate) : '');
+  const rows = ['Date Range,' + rangeStr, '', 'Vehicle No,Date,No. of Trips,Tonnage (T),Amount (₹)'];
   let gtT=0, gtTon=0, gtAmt=0;
   vehicles.forEach(v => {
     const vno = (document.querySelector('#card-' + v.id + ' .vno-input')?.value||'').trim();
     let vT=0, vTon=0, vAmt=0;
     document.querySelectorAll('#body-' + v.id + ' tr.data-row').forEach(tr => {
+      if (tr.classList.contains('date-hidden')) return;
       const date = tr.querySelector('input[type="date"]')?.value||'';
-      const inv = (tr.querySelector('.cell-input.mono')?.value||'').trim();
+      const tripsVal = (tr.querySelector('.cell-input.trips')?.value||'').trim();
       const ton = tr.querySelector('.cell-input.tonnage')?.value||'';
       const tonV = parseFloat(ton)||0;
       const amtV = tonV * 130;
-      if (date||inv||ton) {
-        rows.push([ce(vno), ce(date?fmtDate(date):''), ce(inv), tonV>0?tonV.toFixed(3):'', tonV>0?amtV.toFixed(2):''].join(','));
-        if (tonV>0){vT++;vTon+=tonV;vAmt+=amtV;}
+      if (date||tripsVal||ton) {
+        const tVal = parseFloat(tripsVal);
+        const rowTrips = !isNaN(tVal) ? tVal : (tonV > 0 ? 1 : 0);
+        rows.push([ce(vno), ce(date?fmtDate(date):''), rowTrips>0?rowTrips:'', tonV>0?tonV.toFixed(3):'', tonV>0?amtV.toFixed(2):''].join(','));
+        if (tonV>0 || rowTrips>0){vT+=rowTrips;vTon+=tonV;vAmt+=amtV;}
       }
     });
     if (vno) {
@@ -1092,10 +1260,238 @@ function exportCSV() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'lorry_register_' + (sheetDate||new Date().toISOString().split('T')[0]) + '.csv';
+  a.download = 'lorry_register_' + (fromDate || new Date().toISOString().split('T')[0]) + '.csv';
   a.click();
   URL.revokeObjectURL(url);
   toast('CSV exported', 'success');
+}
+
+// ── INDIVIDUAL VEHICLE EXPORT ──
+function exportVehicleExcel(vid) {
+  const v = vehicles.find(x => x.id === vid);
+  if (!v) return;
+  const vno = (document.querySelector('#card-' + vid + ' .vno-input')?.value||'').trim().toUpperCase();
+  const fromDate = document.getElementById('fromDate').value;
+  const toDate = document.getElementById('toDate').value;
+  const rangeStr = (fromDate ? fmtDate(fromDate) : '') + ' to ' + (toDate ? fmtDate(toDate) : '');
+  
+  const primaryColor = '#1A3C6E';
+  const borderColor = '#CBD5E1';
+  const greenBg = '#DCFCE7';
+  const greenText = '#15803D';
+  
+  let html = '<html xmlns:o="urn:schemas-microsoft-excel:office:office" xmlns:x="urn:schemas-microsoft-excel:excel" xmlns="http://www.w3.org/TR/REC-html40">';
+  html += '<head><meta charset="utf-8"><style>';
+  html += 'table { border-collapse: collapse; margin-bottom: 20px; font-family: sans-serif; }';
+  html += 'th, td { border: 1px solid ' + borderColor + '; padding: 8px 10px; font-size: 10pt; }';
+  html += '.vno-header { background-color: ' + primaryColor + '; color: white; font-weight: bold; font-size: 12pt; padding: 10px; text-align: center; }';
+  html += '.meta-header { font-size: 10pt; color: #555; font-style: italic; text-align: center; }';
+  html += '.th-head { background-color: #F1F5F9; color: ' + primaryColor + '; font-weight: bold; text-align: center; }';
+  html += '.total-row td { background-color: ' + greenBg + '; color: ' + greenText + '; font-weight: bold; }';
+  html += '.text-center { text-align: center; }';
+  html += '.text-right { text-align: right; }';
+  html += '</style></head><body>';
+  
+  html += '<table>';
+  html += '<tr><td colspan="5" class="vno-header">Vehicle No: ' + esc(vno || 'UNNAMED') + '</td></tr>';
+  html += '<tr><td colspan="5" class="meta-header">Adding Value Transport &nbsp;·&nbsp; Date Range: ' + esc(rangeStr) + '</td></tr>';
+  html += '</table>';
+  
+  html += '<table>';
+  html += '<tr>';
+  html += '<th class="th-head" style="width: 50px;">#</th>';
+  html += '<th class="th-head" style="width: 120px;">Date</th>';
+  html += '<th class="th-head" style="width: 100px;">No. of Trips</th>';
+  html += '<th class="th-head" style="width: 120px;">Tonnage (T)</th>';
+  html += '<th class="th-head" style="width: 120px;">Amount (₹)</th>';
+  html += '</tr>';
+  
+  let vT = 0, vTon = 0, vAmt = 0;
+  let idx = 1;
+  document.querySelectorAll('#body-' + vid + ' tr.data-row').forEach(tr => {
+    if (tr.classList.contains('date-hidden')) return;
+    const date = tr.querySelector('input[type="date"]')?.value||'';
+    const tripsVal = (tr.querySelector('.cell-input.trips')?.value||'').trim();
+    const ton = tr.querySelector('.cell-input.tonnage')?.value||'';
+    const tonV = parseFloat(ton)||0;
+    const amtV = tonV * 130;
+    if (date||tripsVal||ton) {
+      const tVal = parseFloat(tripsVal);
+      const rowTrips = !isNaN(tVal) ? tVal : (tonV > 0 ? 1 : 0);
+      html += '<tr>';
+      html += '<td class="text-center">' + idx++ + '</td>';
+      html += '<td class="text-center">' + (date ? fmtDate(date) : '') + '</td>';
+      html += '<td class="text-center">' + (rowTrips > 0 ? rowTrips : '') + '</td>';
+      html += '<td class="text-right">' + (tonV > 0 ? tonV.toFixed(3) : '') + '</td>';
+      html += '<td class="text-right">' + (tonV > 0 ? '₹ ' + amtV.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '') + '</td>';
+      html += '</tr>';
+      if (tonV>0 || rowTrips>0){vT+=rowTrips; vTon+=tonV; vAmt+=amtV;}
+    }
+  });
+  
+  html += '<tr class="total-row">';
+  html += '<td colspan="2" class="text-right">Vehicle Total:</td>';
+  html += '<td class="text-center">' + vT + '</td>';
+  html += '<td class="text-right">' + vTon.toFixed(3) + ' T</td>';
+  html += '<td class="text-right">₹ ' + vAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>';
+  html += '</tr>';
+  html += '</table>';
+  
+  html += '</body></html>';
+  
+  const blob = new Blob([html], {type:'application/vnd.ms-excel;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'lorry_register_' + (vno || 'vehicle') + '_' + (fromDate || new Date().toISOString().split('T')[0]) + '.xls';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Vehicle Excel exported', 'success');
+}
+
+// ── GLOBAL EXCEL EXPORT ──
+function exportExcel() {
+  const fromDate = document.getElementById('fromDate').value;
+  const toDate = document.getElementById('toDate').value;
+  const rangeStr = (fromDate ? fmtDate(fromDate) : '') + ' to ' + (toDate ? fmtDate(toDate) : '');
+  
+  const primaryColor = '#1A3C6E';
+  const borderColor = '#CBD5E1';
+  const greenBg = '#DCFCE7';
+  const greenText = '#15803D';
+  
+  let html = '<html xmlns:o="urn:schemas-microsoft-excel:office:office" xmlns:x="urn:schemas-microsoft-excel:excel" xmlns="http://www.w3.org/TR/REC-html40">';
+  html += '<head><meta charset="utf-8"><style>';
+  html += 'table { border-collapse: collapse; margin-bottom: 20px; font-family: sans-serif; }';
+  html += 'th, td { border: 1px solid ' + borderColor + '; padding: 8px 10px; font-size: 10pt; }';
+  html += '.title-header { font-size: 14pt; font-weight: bold; color: ' + primaryColor + '; text-align: center; }';
+  html += '.meta-header { font-size: 10pt; color: #555; font-style: italic; text-align: center; }';
+  html += '.vno-header { background-color: ' + primaryColor + '; color: white; font-weight: bold; font-size: 11pt; padding: 10px; }';
+  html += '.th-head { background-color: #F1F5F9; color: ' + primaryColor + '; font-weight: bold; text-align: center; }';
+  html += '.total-row td { background-color: ' + greenBg + '; color: ' + greenText + '; font-weight: bold; }';
+  html += '.grand-row td { background-color: ' + primaryColor + '; color: white; font-weight: bold; font-size: 11pt; }';
+  html += '.text-center { text-align: center; }';
+  html += '.text-right { text-align: right; }';
+  html += '</style></head><body>';
+  
+  html += '<table>';
+  html += '<tr><td colspan="5" class="title-header">🚛 LORRY TRIPS REGISTER</td></tr>';
+  html += '<tr><td colspan="5" class="meta-header">Adding Value Transport &nbsp;·&nbsp; Date Range: ' + esc(rangeStr) + '</td></tr>';
+  html += '</table>';
+  
+  let gtT = 0, gtTon = 0, gtAmt = 0;
+  
+  vehicles.forEach(v => {
+    const vno = (document.querySelector('#card-' + v.id + ' .vno-input')?.value || v.vno || '').trim().toUpperCase();
+    let vT = 0, vTon = 0, vAmt = 0;
+    
+    html += '<table>';
+    html += '<tr><td colspan="5" class="vno-header">Vehicle No: ' + esc(vno || 'UNNAMED') + '</td></tr>';
+    html += '<tr>';
+    html += '<th class="th-head" style="width: 50px;">#</th>';
+    html += '<th class="th-head" style="width: 120px;">Date</th>';
+    html += '<th class="th-head" style="width: 100px;">No. of Trips</th>';
+    html += '<th class="th-head" style="width: 120px;">Tonnage (T)</th>';
+    html += '<th class="th-head" style="width: 120px;">Amount (₹)</th>';
+    html += '</tr>';
+    
+    let idx = 1;
+    document.querySelectorAll('#body-' + v.id + ' tr.data-row').forEach(tr => {
+      if (tr.classList.contains('date-hidden')) return;
+      const date = tr.querySelector('input[type="date"]')?.value || '';
+      const tripsVal = (tr.querySelector('.cell-input.trips')?.value || '').trim();
+      const ton = tr.querySelector('.cell-input.tonnage')?.value || '';
+      const tonV = parseFloat(ton) || 0;
+      const amtV = tonV * 130;
+      
+      if (date || tripsVal || ton) {
+        const tVal = parseFloat(tripsVal);
+        const rowTrips = !isNaN(tVal) ? tVal : (tonV > 0 ? 1 : 0);
+        
+        html += '<tr>';
+        html += '<td class="text-center">' + idx++ + '</td>';
+        html += '<td class="text-center">' + (date ? fmtDate(date) : '') + '</td>';
+        html += '<td class="text-center">' + (rowTrips > 0 ? rowTrips : '') + '</td>';
+        html += '<td class="text-right">' + (tonV > 0 ? tonV.toFixed(3) : '') + '</td>';
+        html += '<td class="text-right">' + (tonV > 0 ? '₹ ' + amtV.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '') + '</td>';
+        html += '</tr>';
+        
+        if (tonV > 0 || rowTrips > 0) {
+          vT += rowTrips;
+          vTon += tonV;
+          vAmt += amtV;
+        }
+      }
+    });
+    
+    html += '<tr class="total-row">';
+    html += '<td colspan="2" class="text-right">Vehicle Total:</td>';
+    html += '<td class="text-center">' + vT + '</td>';
+    html += '<td class="text-right">' + vTon.toFixed(3) + ' T</td>';
+    html += '<td class="text-right">₹ ' + vAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>';
+    html += '</tr>';
+    html += '</table>';
+    
+    gtT += vT;
+    gtTon += vTon;
+    gtAmt += vAmt;
+  });
+  
+  html += '<table>';
+  html += '<tr class="grand-row">';
+  html += '<td colspan="2" class="text-right">GRAND TOTAL:</td>';
+  html += '<td class="text-center">' + gtT + ' Trips</td>';
+  html += '<td class="text-right">' + gtTon.toFixed(3) + ' T</td>';
+  html += '<td class="text-right">₹ ' + gtAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>';
+  html += '</tr>';
+  html += '</table>';
+  
+  html += '</body></html>';
+  
+  const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'lorry_register_' + (fromDate || new Date().toISOString().split('T')[0]) + '.xls';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Excel exported', 'success');
+}
+
+// ── INDIVIDUAL VEHICLE CSV EXPORT ──
+function exportVehicleCSV(vid) {
+  const v = vehicles.find(x => x.id === vid);
+  if (!v) return;
+  const vno = (document.querySelector('#card-' + vid + ' .vno-input')?.value||'').trim().toUpperCase();
+  const fromDate = document.getElementById('fromDate').value;
+  const toDate = document.getElementById('toDate').value;
+  const rangeStr = (fromDate ? fmtDate(fromDate) : '') + ' to ' + (toDate ? fmtDate(toDate) : '');
+  const rows = ['Vehicle No,' + vno, 'Date Range,' + rangeStr, '', 'Date,No. of Trips,Tonnage (T),Amount (₹)'];
+  let vT=0, vTon=0, vAmt=0;
+  document.querySelectorAll('#body-' + vid + ' tr.data-row').forEach(tr => {
+    if (tr.classList.contains('date-hidden')) return;
+    const date = tr.querySelector('input[type="date"]')?.value||'';
+    const tripsVal = (tr.querySelector('.cell-input.trips')?.value||'').trim();
+    const ton = tr.querySelector('.cell-input.tonnage')?.value||'';
+    const tonV = parseFloat(ton)||0;
+    const amtV = tonV * 130;
+    if (date||tripsVal||ton) {
+      const tVal = parseFloat(tripsVal);
+      const rowTrips = !isNaN(tVal) ? tVal : (tonV > 0 ? 1 : 0);
+      rows.push([ce(date?fmtDate(date):''), rowTrips>0?rowTrips:'', tonV>0?tonV.toFixed(3):'', tonV>0?amtV.toFixed(2):''].join(','));
+      if (tonV>0 || rowTrips>0){vT+=rowTrips; vTon+=tonV; vAmt+=amtV;}
+    }
+  });
+  rows.push('');
+  rows.push(['VEHICLE TOTAL','',vT+' Trips',(Math.round(vTon*1000)/1000).toFixed(3)+' T',(Math.round(vAmt*100)/100).toFixed(2)+' ₹'].join(','));
+  const blob = new Blob([rows.join('\r\n')], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'lorry_register_' + (vno || 'vehicle') + '_' + (fromDate || new Date().toISOString().split('T')[0]) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Vehicle CSV exported', 'success');
 }
 
 function ce(v) {
@@ -1163,30 +1559,78 @@ function parseAndLoadCSV(text) {
   const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
   let start = 0;
   for (let i=0;i<Math.min(6,lines.length);i++) {
-    if (lines[i].startsWith('Vehicle No,')) { start=i+1; break; }
+    if (lines[i].startsWith('Vehicle No,') || lines[i].startsWith('Date,')) { start=i+1; break; }
   }
   const byVno={}, order=[];
+  let singleVno = '';
+  // Check if it's an individual vehicle CSV
+  if (lines[0].startsWith('Vehicle No,')) {
+    singleVno = lines[0].split(',')[1] || '';
+  }
   for (let i=start;i<lines.length;i++) {
     const c = parseCSVLine(lines[i]);
-    if (!c[0]) continue;
-    const cleanFirst = c[0].trim().toUpperCase();
-    if (cleanFirst === 'SHEET DATE' || cleanFirst === 'VEHICLE NO' || c[2] === 'VEHICLE TOTAL' || c[2] === 'GRAND TOTAL') continue;
-    const vno = cleanFirst;
+    if (!c[0] && !singleVno) continue;
+    const cleanFirst = (c[0]||'').trim().toUpperCase();
+    if (cleanFirst === 'SHEET DATE' || cleanFirst === 'DATE RANGE' || cleanFirst === 'VEHICLE NO' || c[2] === 'VEHICLE TOTAL' || c[2] === 'GRAND TOTAL') continue;
+    
+    let vno = cleanFirst;
+    let dr = c[1]||'';
+    let tripsVal = c[2]||'';
+    let ton = c[3]||'';
+    
+    if (singleVno) {
+      vno = singleVno;
+      dr = c[0]||'';
+      tripsVal = c[1]||'';
+      ton = c[2]||'';
+    }
+    if (!vno) continue;
+    
     if (!byVno[vno]) { byVno[vno]=[]; order.push(vno); }
-    const dr=c[1]||'';
     const iso=parseDateToISO(dr);
-    byVno[vno].push({date:iso,invoice:c[2]||'',tonnage:c[3]||''});
+    byVno[vno].push({date:iso, trips:tripsVal, tonnage:ton});
   }
   if (!order.length) throw new Error('No data rows found');
-  vehicles=[]; nextId=0;
-  const grid=document.getElementById('vehiclesGrid');
-  grid.innerHTML='';
-  order.forEach(vno => {
-    const v={id:nextId++,vno,rows:byVno[vno]};
-    vehicles.push(v);
-    grid.appendChild(buildCard(v));
-  });
-  vehicles.forEach(v=>recalc(v.id));
+  
+  // If importing a single vehicle CSV, merge or replace it
+  if (singleVno) {
+    const existingIndex = vehicles.findIndex(v => v.vno === singleVno);
+    const rows = byVno[singleVno];
+    const paddedRows = [];
+    for (let i = 0; i < Math.max(DEFAULT_ROWS, rows.length); i++) {
+      paddedRows.push(rows[i] || {});
+    }
+    if (existingIndex !== -1) {
+      vehicles[existingIndex].rows = paddedRows;
+      const oldCard = document.getElementById('card-' + vehicles[existingIndex].id);
+      if (oldCard) {
+        const newCard = buildCard(vehicles[existingIndex]);
+        oldCard.replaceWith(newCard);
+      }
+      recalc(vehicles[existingIndex].id);
+    } else {
+      const v = {id:nextId++, vno:singleVno, rows:paddedRows};
+      vehicles.push(v);
+      document.getElementById('vehiclesGrid').appendChild(buildCard(v));
+      recalc(v.id);
+    }
+  } else {
+    // Standard global import
+    vehicles=[]; nextId=0;
+    const grid=document.getElementById('vehiclesGrid');
+    grid.innerHTML='';
+    order.forEach(vno => {
+      const rawRows = byVno[vno];
+      const rows = [];
+      for (let i = 0; i < Math.max(DEFAULT_ROWS, rawRows.length); i++) {
+        rows.push(rawRows[i] || {});
+      }
+      const v={id:nextId++,vno,rows};
+      vehicles.push(v);
+      grid.appendChild(buildCard(v));
+    });
+    vehicles.forEach(v=>recalc(v.id));
+  }
   updateGrand(); save();
 }
 
@@ -1228,8 +1672,19 @@ function modalOutsideClick(e) { if(e.target.id==='modal-overlay') closeModal(); 
 
 // ── PRINT ──
 function confirmPrint() {
-  const gd = document.getElementById('globalDate').value;
-  document.getElementById('printDate').textContent = gd ? fmtDate(gd) : new Date().toLocaleDateString('en-IN');
+  const fromVal = document.getElementById('fromDate').value;
+  const toVal = document.getElementById('toDate').value;
+  let rangeStr = '';
+  if (fromVal && toVal) {
+    rangeStr = fmtDate(fromVal) + ' to ' + fmtDate(toVal);
+  } else if (fromVal) {
+    rangeStr = 'From ' + fmtDate(fromVal);
+  } else if (toVal) {
+    rangeStr = 'To ' + fmtDate(toVal);
+  } else {
+    rangeStr = 'All Dates';
+  }
+  document.getElementById('printDate').textContent = rangeStr;
   showModal({
     icon:'🖨️', iconType:'info',
     title:'Print Register?',
@@ -1310,27 +1765,71 @@ function initDefault() {
 
 function init() {
   initTheme();
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('globalDate').value = today;
-  document.getElementById('printDate').textContent = fmtDate(today);
   const saved = load();
   if (saved) {
-    nextId = saved.nextId||0;
     vehicles = saved.vehicles||[];
-    if (saved.globalDate) {
-      document.getElementById('globalDate').value = saved.globalDate;
-      document.getElementById('printDate').textContent = fmtDate(saved.globalDate);
+    let maxId = 0;
+    vehicles.forEach(v => {
+      if (v.id >= maxId) maxId = v.id + 1;
+    });
+    nextId = Math.max(saved.nextId||0, maxId);
+    
+    // Setup initial date ranges with backward compatibility
+    let savedFrom = saved.fromDate;
+    let savedTo = saved.toDate;
+    if (!savedFrom && !savedTo && saved.globalDate) {
+      savedFrom = saved.globalDate;
+      savedTo = saved.globalDate;
     }
+    
     const grid = document.getElementById('vehiclesGrid');
     grid.innerHTML='';
     vehicles.forEach(v=>grid.appendChild(buildCard(v)));
-    vehicles.forEach(v=>recalc(v.id));
+    
+    setInitialDateRange(savedFrom, savedTo);
+    applyDateFilter();
     toast('Data restored from last session','success',2500);
   } else {
     initDefault();
+    setInitialDateRange();
+    applyDateFilter();
   }
   updateGrand();
   checkShareLink();
+}
+
+function setInitialDateRange(savedFrom, savedTo) {
+  if (savedFrom && savedTo) {
+    document.getElementById('fromDate').value = parseDateToISO(savedFrom);
+    document.getElementById('toDate').value = parseDateToISO(savedTo);
+    return;
+  }
+  
+  let minDate = null;
+  let maxDate = null;
+  vehicles.forEach(v => {
+    v.rows.forEach(r => {
+      if (r.date) {
+        const isoDate = parseDateToISO(r.date);
+        if (isoDate) {
+          if (!minDate || isoDate < minDate) minDate = isoDate;
+          if (!maxDate || isoDate > maxDate) maxDate = isoDate;
+        }
+      }
+    });
+  });
+  
+  const today = new Date().toISOString().split('T')[0];
+  if (minDate && maxDate) {
+    document.getElementById('fromDate').value = minDate;
+    document.getElementById('toDate').value = maxDate;
+  } else {
+    // Default to first day of month to today
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+    document.getElementById('fromDate').value = firstDay;
+    document.getElementById('toDate').value = today;
+  }
 }
 
 init();
